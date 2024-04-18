@@ -2,11 +2,18 @@ const express=require('express')
 const router=express.Router()
 const {
     
-    createTestMedicalIncident
-}=require('../controllers/medicalIncidentController')
+    createTestMedicalIncident,  GetTestMedicalIncident,
+}=require('../controllers/medicalIncidentController');
+
+
+
+
 
 //post a new test
 router.post('/', 
-createTestMedicalIncident)
+createTestMedicalIncident);
+//Get a test
+router.get('/', 
+GetTestMedicalIncident);
 
-module.exports=router
+module.exports=router;

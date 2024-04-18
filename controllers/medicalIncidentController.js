@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 
 // Create a new medical incident
 const createTestMedicalIncident = async (req, res) => {
-  const { incidentType, date,testType, testProvider} = req.body;
+  const {incidentType, date,testType, testProvider} = req.body;
   
   try {
     // Create a new test medical incident document
-    const testMedicalIncident = await TestMedicalIncident.create({ incidentType, date ,testType,testProvider});
+    const testMedicalIncident = await TestMedicalIncident.create({incidentType, date ,testType,testProvider});
 
     // Respond with the created test medical incident
     res.status(200).json(testMedicalIncident);
@@ -17,6 +17,23 @@ const createTestMedicalIncident = async (req, res) => {
   }
 };
 
+
+
+const GetTestMedicalIncident = async (req, res) => {
+  try {
+    console.log("Fetching tests");
+    const Tests = await TestMedicalIncident.find({}).sort({ createdAt: -1 });;
+    // .sort({
+    //   createdAt: -1,
+    // });
+    console.log(Tests);
+    res.status(200).json(Tests);
+  } catch (error) {
+    console.error("Error fetching tests:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
-  createTestMedicalIncident
+  createTestMedicalIncident,GetTestMedicalIncident
 };
