@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 
+const {
+  generateRefreshToken,
+} = require("../utils/TokenGenarate/generateRefreshToken");
+
+const {
+  generateAccessToken,
+} = require("../utils/TokenGenarate/generateAccessToken");
+
 require("../models/PortalAdminModel");
 
 const Admin = mongoose.model("Admin");
@@ -9,29 +17,29 @@ const Admin = mongoose.model("Admin");
 //Admin signup
 const adminSignUp = async (req, res) => {
   console.log("adminsignup");
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
+  const { firstName, lastName, email, password } = req.body;
+  console.log(firstName, lastName, email, password);
+  if (!firstName || !lastName || !email || !password) {
     return res
-      .status(401)
+      .status(400)
       .send({ error: "Must provide name, email and password" });
   }
 
   if (!validator.isEmail(email)) {
-    return res.status(401).send({ error: "Email is not valid" });
+    return res.status(400).send({ error: "Email is not valid" });
   }
 
   try {
     const userFind = await Admin.findOne({ email });
 
     if (userFind) {
-      return res.status(401).send({
+      return res.status(400).send({
         error:
           "Duplicate Email, please enter a diiferent email or signin using the email",
       });
     }
 
-    const user = new Admin({ name, email, password });
+    const user = new Admin({ firstName, lastName, email, password });
 
     await user.save();
 
@@ -56,20 +64,35 @@ const adminSignIn = async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    const token = jwt.sign(
-      { userId: user._id, username: user.name },
-      process.env.JWT_KEY,
-      {
-        expiresIn: "3d",
-      }
-    );
-    res.send({ token });
+    console.log(user._id, user.role, user.firstName, user.lastName);
+    const accessToken = await generateAccessToken({
+      _id: user._id,
+      roles: user.role,
+      fName: user.firstName,
+      lName: user.lastName,
+    });
+
+    const refreshToken = await generateRefreshToken({
+      _id: user._id,
+      roles: user.role,
+      fName: user.firstName,
+      lName: user.lastName,
+    });
+
+    res.send({ token:accessToken, refreshToken:refreshToken });
+
   } catch (err) {
     return res.status(401).send({ error: "Invalid password" });
   }
 };
 
+const adminChangePass = (req, res) => {
+  const { email } = req.body;
+  res.send(email);
+};
+
 module.exports = {
   adminSignUp,
   adminSignIn,
+  adminChangePass,
 };

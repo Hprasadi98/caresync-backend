@@ -49,7 +49,7 @@ const deleteDoctor = async (req, res) => {
   if (!doctor) {
     return res.status(400).json({ error: "No such doctor" });
   }
-  res.status(200).json({ message: "Doctor deleted"});
+  res.status(200).json({ message: "Doctor deleted (Res Msg Only)"});
 };
 
 // update a doctor

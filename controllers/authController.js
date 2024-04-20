@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 require("../models/Patient");
 
@@ -12,6 +11,10 @@ const {
 const {
   generateAccessToken,
 } = require("../utils/TokenGenarate/generateAccessToken");
+
+const {
+  refreshAccessToken,
+} = require("../utils/TokenGenarate/refreshAccessGenerate");
 
 const userSignUp = async (req, res) => {
   console.log(req.body);
@@ -155,9 +158,27 @@ const doctorSignIn = async (req, res) => {
   }
 };
 
+const refreshAT = async (req, res) => {
+  const { refreshToken} = req.body;
+  console.log(refreshToken);
+  if (!refreshToken) {
+    return res.status(400).send({ error: "Must provide refresh token" });
+  }
+  // return res.status(200).send({ msg: "Success" });
+  refreshAccessToken(refreshToken)
+    .then((result) => {
+
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send({ error: "Invalid refresh token" });
+    });
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
   doctorSignUp,
   doctorSignIn,
+  refreshAT,
 };

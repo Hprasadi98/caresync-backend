@@ -1,3 +1,5 @@
+
+
 const express = require("express");
 
 const {
@@ -18,9 +20,9 @@ router.get("/", getDoctors);
 router.get("/:id", getDoctor);
 
 // Delete a doctor
-router.delete("/:id", deleteDoctor);
+// router.delete("/:id", deleteDoctor);
 
- // Update a doctor
+// Update a doctor
 router.patch("/:id", updateDoctor);
 
 // Add patient access to doctor
@@ -30,4 +32,3 @@ router.patch("/addPatientAccess/:id", addPatientAccess);
 router.patch("/verifyDoctor/:id", verifyDoctor);
 
 module.exports = router;
-
