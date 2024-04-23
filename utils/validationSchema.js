@@ -1,7 +1,4 @@
-
 import Joi from 'joi';
-
-
 
 export default  refreshTokenBodyValidation = (body) => {
     const schema = Joi.object({

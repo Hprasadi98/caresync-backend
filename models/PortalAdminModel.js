@@ -3,7 +3,11 @@ const bcrypt = require("bcrypt");
 
 const AdminSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -15,6 +19,14 @@ const AdminSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      required: true,
+      default: "admin",
+    },
+    refreshToken: {
+      type: String,
     },
   },
   { timestamps: true }

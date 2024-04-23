@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Doctor = require("../../models/doctor");
 const Patient = require("../../models/Patient");
+const Admin = require("../../models/PortalAdminModel");
 
 const generateRefreshToken = async (payload) => {
   console.log("payload", payload);
@@ -29,6 +30,15 @@ const generateRefreshToken = async (payload) => {
       { new: true }
     );
   }
+  if (payload.roles === "admin") {
+    console.log("admin");
+    updatedUser = await Admin.findOneAndUpdate(
+      { _id: payload._id }, 
+      { refreshToken: refreshToken },
+      { new: true }
+    );
+  }
+
 
   
 
