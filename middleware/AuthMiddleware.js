@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
       console.log("JWT Token decoded: " + JSON.stringify(decoded));
       next();
     } catch (error) {
-      console.log(error);
+      console.log("err", error);
       console.log(
         "Auth failed, Temporarily letting it pass for testing purposes."
       );
