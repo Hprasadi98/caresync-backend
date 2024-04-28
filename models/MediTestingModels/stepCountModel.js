@@ -20,6 +20,10 @@ const stepCountSchema = new Schema(
       type: Number,
       required: true,
     },
+    calories: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
