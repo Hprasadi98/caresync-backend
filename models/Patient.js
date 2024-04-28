@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "patient",
     },
+    testResultLinks:{
+      type: Array,
+      default: [],
+    }
   },
   { timestamps: true }
 );
