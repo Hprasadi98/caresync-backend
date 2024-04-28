@@ -51,6 +51,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "patient",
     },
+    mobileNumber: {
+      type: String,
+    },
+    birthday: {
+      type: String,
+    },
+    weight: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

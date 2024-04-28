@@ -63,9 +63,57 @@ const deletePatient = async (req, res) => {
 
 
 
+const updatePatient= async (req, res) => {
+  const { id } = req.params;
+  const newData = req.body;
+
+  try {
+    // Find the patient by ID and update their information
+    const updatedPatient = await Patient.findByIdAndUpdate(id, newData, { new: true });
+
+    if (!updatedPatient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    // Optionally, you can perform additional operations or validation here
+
+    // Send the updated patient object in the response
+    res.json(updatedPatient);
+  } catch (error) {
+    console.error('Error updating patient:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   getPatients,
   getPatient,
   deletePatient,
   addDocAccess,
+  updatePatient
 };

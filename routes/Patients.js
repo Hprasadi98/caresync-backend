@@ -1,5 +1,11 @@
 const express = require("express");
-const { getPatients, getPatient, addDocAccess, deletePatient } = require("../controllers/patientController");
+const {
+  getPatients,
+  getPatient,
+  addDocAccess,
+  deletePatient,
+  updatePatient
+} = require("../controllers/patientController");
 
 const router = express.Router();
 
@@ -7,10 +13,14 @@ const router = express.Router();
 router.get("/", getPatients);
 
 // Get a patient
-router.get("/patientId", getPatient);
+router.get("/_id", getPatient);
 
 // Delete a patient
 router.delete("/:id", deletePatient);
+
+
+// update a patient
+router.put("/:id", updatePatient);
 
 // Give patient access to doctor
 router.patch("/addDocAccess/:id", addDocAccess);
