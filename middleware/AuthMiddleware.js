@@ -4,6 +4,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
+    console.log("No authorization header found in request.");
     next();
     // return res.status(401).send({ error: "You must be logged in." });
   } else {
