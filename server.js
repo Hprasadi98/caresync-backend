@@ -40,6 +40,8 @@ app.use("/api", RoutesIndex);
 
 
 
+
+
 //connect to db
 mongoose
   .connect(process.env.MONGO_URI)
@@ -62,6 +64,3 @@ mongoose
 // app.use("/api", Auth,  RoutesIndex);
 // app.use("/api/admin", AdminAuth,  RoutesIndex);
 
-app.get("/", (req, res) => {
-  res.send({ msg: "CareSync Test Endpoint v1" });
-});
