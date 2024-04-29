@@ -4,6 +4,8 @@ require("../models/Patient");
 const Patient = mongoose.model("Patient");
 const Doctor = mongoose.model("Doctor");
 
+const nodemailer = require("nodemailer");
+
 const {
   generateRefreshToken,
 } = require("../utils/TokenGenarate/generateRefreshToken");
@@ -15,6 +17,10 @@ const {
 const {
   refreshAccessToken,
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
+
+const {
+  forgotPasswordToken,
+} = require("../utils/TokenGenarate/forgotPasswordAccessToken");
 
 const userSignUp = async (req, res) => {
   console.log(req.body);
@@ -179,10 +185,69 @@ const refreshAT = async (req, res) => {
     });
 };
 
+//handle forgot passowrd
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    let user = await Patient.findOne({ email });
+    if (!user) {
+      user = await Doctor.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "User does not exist" });
+      }
+    }
+
+    // Generate a reset token
+    const token = forgotPasswordToken({ email: user.email }); // Using the utility function
+
+    // Save the token to the user's document in the database
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    await user.save();
+
+    // Send an email with a reset link
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // false for 587, true for 465, false for other ports
+      auth: {
+        user: "maddison53@ethereal.email",
+        pass: "jn7jnAPss4f63QBp6D",
+      },
+    });
+
+    const mailOptions = {
+      from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
+      to: user.email,
+      subject: "Password Reset",
+      text:
+        `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
+        `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+        `http://${req.headers.host}/reset/${token}\n\n` +
+        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent: " + info.response);
+      res.status(200).json({ message: "Email sent" });
+    });
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
   doctorSignUp,
   doctorSignIn,
   refreshAT,
+  forgotPassword,
 };

@@ -4,6 +4,7 @@ const {
   doctorSignUp,
   doctorSignIn,
   refreshAT,
+  forgotPassword,
 } = require("../controllers/authController");
 
 const express = require("express");
@@ -23,6 +24,8 @@ router.post("/doctors/signup", doctorSignUp);
 router.post("/doctors/signin", doctorSignIn);
 
 router.post("/refreshAT", refreshAT);
+
+router.post("/forgotPassword", forgotPassword);
 
 
 
