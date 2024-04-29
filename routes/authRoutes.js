@@ -1,3 +1,5 @@
+const express = require("express");
+const router = express.Router();
 const {
   userSignUp,
   userSignIn,
@@ -5,11 +7,8 @@ const {
   doctorSignIn,
   refreshAT,
   forgotPassword,
+  resetPassword,
 } = require("../controllers/authController");
-
-const express = require("express");
-
-const router = express.Router();
 
 // Patient Sign-up
 router.post("/signup", userSignUp);
@@ -23,10 +22,13 @@ router.post("/doctors/signup", doctorSignUp);
 // Doctor Sign-in
 router.post("/doctors/signin", doctorSignIn);
 
+// Refresh Access Token
 router.post("/refreshAT", refreshAT);
 
+// Forgot Password
 router.post("/forgotPassword", forgotPassword);
 
-
+// Reset Password Route
+router.get("/reset/:token", resetPassword);
 
 module.exports = router;

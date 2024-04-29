@@ -6,6 +6,8 @@ const Doctor = mongoose.model("Doctor");
 
 const nodemailer = require("nodemailer");
 
+const jwt = require("jsonwebtoken");
+
 const {
   generateRefreshToken,
 } = require("../utils/TokenGenarate/generateRefreshToken");
@@ -243,6 +245,41 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    console.log(token);
+    
+    const Token = jwt.verify(token, process.env.FORGOT_PASSWORD_TOKEN_SECRET);
+
+    //find the user with the token using email
+
+    let user = await Patient.findOne({ email: new Token.email }); 
+    
+    if (!user) {
+      user = await Doctor.findOne({ email: new Token.email });
+      if (!user) {
+        return res.status(400).json({ error: "User does not exist" });
+      }
+    }
+
+    //check if the token is expired
+
+    if (user.resetPasswordExpires < Date.now()) {
+      return res.status(400).json({ error: "Token expired" });
+    }
+
+    //if the token is not expired, render the reset password page
+    res.render("resetPassword", { user });
+  }
+  catch (error) {
+    console.error("Error in resetPassword:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   userSignUp,
   userSignIn,
@@ -250,4 +287,5 @@ module.exports = {
   doctorSignIn,
   refreshAT,
   forgotPassword,
+  resetPassword,
 };
