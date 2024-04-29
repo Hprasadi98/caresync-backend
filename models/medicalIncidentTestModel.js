@@ -4,15 +4,19 @@ const Schema = mongoose.Schema
 
 const MedicalIncidentSchema= new Schema({
     //medical record data
-    RecName:{
-        type: 'string',
+    recordName:{
+        type:String,
     },
-    record_description:{
-        type: 'string',
+    recordDescription:{
+        type:String,
     },
     weight:{
-        type: 'string',
+        type:String,
     },
+    appetite:{
+        type:String,
+    },
+
    //Test Modal data
    incidentType:{
         type:String,
@@ -32,11 +36,11 @@ const MedicalIncidentSchema= new Schema({
         
     },
     //Symptom Modal data
-    SymptomDescription:{
+    symptomDescription:{
         type:String,
         
     },
-    Frequency:{
+    frequency:{
         type:String,
         
     },
