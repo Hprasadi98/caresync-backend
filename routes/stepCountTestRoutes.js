@@ -2,7 +2,8 @@ const express = require('express')
 const {
    getStepCounterTestResult,
    createStepCountResult,
-   deleteStepCounterTestResult 
+   deleteStepCounterTestResult, 
+   deleteOneStepCountResult,
 }= require('../controllers/stepCountController')
 
 const router = express.Router()
@@ -15,5 +16,8 @@ router.post('/', createStepCountResult)
 
 //delete results
 router.delete('/', deleteStepCounterTestResult)
+
+//delete one result
+router.delete('/:id', deleteOneStepCountResult)
 
 module.exports = router

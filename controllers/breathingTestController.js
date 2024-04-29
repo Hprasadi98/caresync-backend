@@ -1,3 +1,4 @@
+const { response } = require("express");
 const breathingTest = require("../models/MediTestingModels/breathingTestModel.js");
 
 //get results
@@ -8,11 +9,11 @@ const getbreathingTestResult = async (req, res) => {
 
 //post result
 const createBreathingTestResult = async (req, res) => {
-  const { date, stopwatchTime } = req.body;
+  const { date,systime, stopwatchTime } = req.body;
 
   //add doc to db
   try {
-    const breathing = await breathingTest.create({ date, stopwatchTime });
+    const breathing = await breathingTest.create({ date, systime, stopwatchTime });
     res.status(200).json(breathing);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -25,8 +26,21 @@ const deletebreathingTestResults = async (req, res) => {
   res.status(200).json(deleteResults);
 };
 
+//delete one
+const deleteOneResult=(req, res, next)=>{
+  const id = req.body.id;
+  breathingTest.deleteOne({id : id})
+  .then(response=>{
+    res.json({response})
+  })
+  .catch(error=>{
+    res.json({error})
+  });
+};
+
 module.exports = {
   getbreathingTestResult,
   createBreathingTestResult,
-  deletebreathingTestResults,
+  deleteOneResult,
+  deletebreathingTestResults
 };

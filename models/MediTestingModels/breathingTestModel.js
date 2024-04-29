@@ -8,6 +8,10 @@ const breathingTestSchema = new Schema(
       type: String,
       required: true,
     },
+    systime: {
+      type: String,
+      required:true,
+    },
     stopwatchTime: {
       type: String,
       required: true,
