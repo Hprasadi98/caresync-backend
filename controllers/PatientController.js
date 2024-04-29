@@ -12,7 +12,7 @@ const getPatients = async (req, res) => {
 const getPatient = async (req, res) => {
   const { patientId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(patientId)) {
-    return res.status(404).json({ error: "No such error" });
+    return res.status(404).json({ error: "Invalid patient ID" });
   }
 
   const Patient = await Patient.findById(patientId);

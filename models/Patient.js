@@ -60,6 +60,12 @@ const userSchema = new mongoose.Schema(
     weight: {
       type: String,
     },
+
+    testResultLinks:{
+      type: Array,
+      default: [],
+    }
+
   },
   { timestamps: true }
 );
