@@ -51,10 +51,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "patient",
     },
+    mobileNumber: {
+      type: String,
+    },
+    birthday: {
+      type: String,
+    },
+    weight: {
+      type: String,
+    },
+
     testResultLinks:{
       type: Array,
       default: [],
     }
+
   },
   { timestamps: true }
 );
