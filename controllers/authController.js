@@ -19,7 +19,7 @@ const {
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
 
 const {
-  forgotPasswordToken,
+  forgotPasswordAccessToken,
 } = require("../utils/TokenGenarate/forgotPasswordAccessToken");
 
 const userSignUp = async (req, res) => {
@@ -200,7 +200,7 @@ const forgotPassword = async (req, res) => {
     }
 
     // Generate a reset token
-    const token = forgotPasswordToken({ email: user.email }); // Using the utility function
+    const token = forgotPasswordAccessToken({ email: user.email }); // Using the utility function
 
     // Save the token to the user's document in the database
     user.resetPasswordToken = token;
@@ -209,17 +209,17 @@ const forgotPassword = async (req, res) => {
 
     // Send an email with a reset link
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // false for 587, true for 465, false for other ports
+      service: "gmail",
+      // port: 587,
+      // secure: false, // false for 587, true for 465, false for other ports
       auth: {
-        user: "maddison53@ethereal.email",
-        pass: "jn7jnAPss4f63QBp6D",
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
       },
     });
 
     const mailOptions = {
-      from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
+      from: 'manushadananjaya999@gmail.com',
       to: user.email,
       subject: "Password Reset",
       text:
