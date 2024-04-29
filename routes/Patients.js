@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/", getPatients);
 
 // Get a patient
-router.get("/_id", getPatient);
+router.get("/patientId", getPatient);
 
 // Delete a patient
 router.delete("/:id", deletePatient);
