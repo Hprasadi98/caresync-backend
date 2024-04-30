@@ -190,17 +190,27 @@ const refreshAT = async (req, res) => {
 //handle forgot passowrd
 const forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, userType } = req.body;
+
+    console.log("email:", email);
+    console.log("userType:", userType);
 
     // Check if email exists in the patient or doctor database
-    let user = await Patient.findOne({ email });
-    if (!user) {
-      user = await Doctor.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: "User does not exist" });
-      }
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
+    console.log("user:", user);
+    
+    if(user === null){
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+      
     }
-
+    
+    
     // Generate a random OTP
     const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
 
@@ -217,6 +227,8 @@ const forgotPassword = async (req, res) => {
         pass: "tums mfyz lncy tmhk",
       },
     });
+
+    console.log("email:", user.email);
 
     const mailOptions = {
       from: "manushadananjaya999@gmail.com",
@@ -249,16 +261,10 @@ const forgotPassword = async (req, res) => {
 const verifyOTP = async (req, res) => {
   try {
     console.log(req.body);
-    const { email, otp } = req.body;
+    const { email, otp,userType} = req.body;
 
     // Check if email exists in the patient or doctor database
-    let user = await Patient.findOne({ email });
-    if (!user) {
-      user = await Doctor.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: "User does not exist" });
-      }
-    }
+    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
 
     // Check if the OTP is correct
     if (user.resetPasswordOTP !== otp) {
@@ -270,21 +276,12 @@ const verifyOTP = async (req, res) => {
       return res.status(400).json({ error: "OTP expired" });
     }
 
-    // Generate a new access token
-    const accessToken = await forgotPasswordAccessToken({
-      _id: user._id,
-      roles: user.role,
-      fName: user.firstName,
-      lName: user.lastName,
-    });
-
     // Reset the OTP in the user's document
     user.resetPasswordOTP = undefined;
     await user.save();
 
-    console.log(accessToken);
-
-    res.status(200).json({ accessToken });
+   
+    res.status(200).json({ message: "OTP verified" });
   } catch (error) {
     console.error("Error in verifyOTP:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -295,7 +292,7 @@ const verifyOTP = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
-
+    console.log(req.body);
     // console.log("email:",email);
     // console.log("password:",password);
 
@@ -317,23 +314,13 @@ const resetPassword = async (req, res) => {
       return res.status(401).json({ error: "Access token required" });
     }
 
-    // Check if the access token is valid and not expired Authorization: `Bearer ${accessToken}`,
-    const accessToken = req.headers.authorization.split(" ")[1];
-    console.log("access", accessToken);
-
-    // Verify the access token
-    const decoded = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    console.log("decoded", decoded);
-    if (!decoded) {
-      return res.status(401).json({ error: "Invalid access token" });
-    }
-    const role = decoded.roles;
+    console.log("req.headers.authorization", req.headers.authorization);
 
     //rewrite the password in database to correct user find by id from access token
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({ message: "Password reset successful", role: role });
+    res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
     console.error("Error in resetPassword:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -342,16 +329,16 @@ const resetPassword = async (req, res) => {
 
 const resendOTP = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email,userType} = req.body;
 
     // Check if email exists in the patient or doctor database
-    let user = await Patient.findOne({ email });
-    if (!user) {
-      user = await Doctor.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: "User does not exist" });
-      }
-    }
+    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
+
+    if(user === null){
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+      
+    } 
 
     // Generate a new OTP
     const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
@@ -388,10 +375,9 @@ const resendOTP = async (req, res) => {
         console.log(error);
         return res.status(500).json({ error: "Error sending email" });
       }
-      // console.log("Email sent: " + info.response);
-      //new otp send success message to user 
+      console.log("Email sent: " + info.response);
+      //new otp send success message to user
       res.status(200).json({ message: "New OTP sent" });
-
     });
   } catch (error) {
     console.error("Error in resendOTP:", error);
