@@ -29,6 +29,6 @@ router.post("/refreshAT", refreshAT);
 router.post("/forgotPassword", forgotPassword);
 
 // Reset Password Route
-router.get("/reset/:token", resetPassword);
+router.get('/reset/:token',  resetPassword);
 
 module.exports = router;

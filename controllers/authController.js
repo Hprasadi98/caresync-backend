@@ -227,7 +227,7 @@ const forgotPassword = async (req, res) => {
       text:
         `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
         `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-        `http://${req.headers.host}/reset/${token}\n\n` +
+        `http://${req.headers.host}/api/reset/${token}\n\n` +
         `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
     };
 
@@ -253,17 +253,22 @@ const resetPassword = async (req, res) => {
     console.log(token);
     
     const Token = jwt.verify(token, process.env.FORGOT_PASSWORD_TOKEN_SECRET);
+    console.log(Token);
+
+    
 
     //find the user with the token using email
 
-    let user = await Patient.findOne({ email: new Token.email }); 
+    let user = await Patient.findOne({ email: Token.email }); 
     
     if (!user) {
-      user = await Doctor.findOne({ email: new Token.email });
+      user = await Doctor.findOne({ email: Token.email });
       if (!user) {
         return res.status(400).json({ error: "User does not exist" });
       }
     }
+
+    console.log(user);
 
     //check if the token is expired
 
@@ -271,6 +276,7 @@ const resetPassword = async (req, res) => {
       return res.status(400).json({ error: "Token expired" });
     }
 
+    
     //if the token is not expired, render the reset password page
     res.render("resetPassword", { user });
   }
