@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 
 const stepCountSchema = new Schema(
   {
+    pID:{
+      type:Number,
+      required:true,
+    },
     date: {
       type: String,
       required: true,

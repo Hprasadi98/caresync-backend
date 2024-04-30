@@ -3,17 +3,17 @@ const breathingTest = require("../models/MediTestingModels/breathingTestModel.js
 
 //get results
 const getbreathingTestResult = async (req, res) => {
-  const breathingResults = await breathingTest.find({}).sort({ createdAt: -1 });
+  const breathingResults = await breathingTest.find({pID:212}).sort({ createdAt: -1 });
   res.status(200).json(breathingResults);
 };
 
 //post result
 const createBreathingTestResult = async (req, res) => {
-  const { date,systime, stopwatchTime } = req.body;
+  const { pID, date,systime, stopwatchTime } = req.body;
 
   //add doc to db
   try {
-    const breathing = await breathingTest.create({ date, systime, stopwatchTime });
+    const breathing = await breathingTest.create({pID, date, systime, stopwatchTime });
     res.status(200).json(breathing);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -28,13 +28,13 @@ const deletebreathingTestResults = async (req, res) => {
 
 //delete one
 const deleteOneResult=(req, res, next)=>{
-  const id = req.body.id;
-  breathingTest.deleteOne({id : id})
+  const {id} = req.params;
+  breathingTest.deleteOne({_id : id})
   .then(response=>{
-    res.json({response})
+    res.status(200).json({response})
   })
   .catch(error=>{
-    res.json({error})
+    res.status(400).json({error})
   });
 };
 
