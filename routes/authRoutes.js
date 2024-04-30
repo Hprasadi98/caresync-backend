@@ -7,8 +7,11 @@ const {
   doctorSignIn,
   refreshAT,
   forgotPassword,
+  verifyOTP,
   resetPassword,
+  resendOTP,
 } = require("../controllers/authController");
+const { verify } = require("jsonwebtoken");
 
 // Patient Sign-up
 router.post("/signup", userSignUp);
@@ -28,7 +31,13 @@ router.post("/refreshAT", refreshAT);
 // Forgot Password
 router.post("/forgotPassword", forgotPassword);
 
-// Reset Password Route
-router.get('/reset/:token',  resetPassword);
+//otp verification 
+router.post("/verifyOTP", verifyOTP);
+
+//password reset
+router.post("/resetPassword", resetPassword);
+
+//resend OTP
+router.post("/resendOTP", resendOTP);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const Doctor = mongoose.model("Doctor");
 
 const nodemailer = require("nodemailer");
 
-const jwt = require("jsonwebtoken");
+const { verify } = require("jsonwebtoken");
 
 const {
   generateRefreshToken,
@@ -201,19 +201,17 @@ const forgotPassword = async (req, res) => {
       }
     }
 
-    // Generate a reset token
-    const token = forgotPasswordAccessToken({ email: user.email }); // Using the utility function
+    // Generate a random OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
 
-    // Save the token to the user's document in the database
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.resetPasswordOTP = OTP;
+    user.resetPasswordOTPExpires = Date.now() + 600000; // 10 minutes
     await user.save();
 
-    // Send an email with a reset link
+    // Send the OTP via email
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      // port: 587,
-      // secure: false, // false for 587, true for 465, false for other ports
       auth: {
         user: "manushadananjaya999@gmail.com",
         pass: "tums mfyz lncy tmhk",
@@ -221,14 +219,16 @@ const forgotPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from: 'manushadananjaya999@gmail.com',
+      from: "manushadananjaya999@gmail.com",
       to: user.email,
-      subject: "Password Reset",
-      text:
-        `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-        `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-        `http://${req.headers.host}/api/reset/${token}\n\n` +
-        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+      subject: "Password Reset OTP",
+      html: `
+        <p>Hello,</p>
+        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
+        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -245,47 +245,159 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {
+//handle verify OTP
+const verifyOTP = async (req, res) => {
   try {
-    console.log(req);
-    const { token } = req.params;
+    console.log(req.body);
+    const { email, otp } = req.body;
 
-    console.log(token);
-    
-    const Token = jwt.verify(token, process.env.FORGOT_PASSWORD_TOKEN_SECRET);
-    console.log(Token);
-
-    
-
-    //find the user with the token using email
-
-    let user = await Patient.findOne({ email: Token.email }); 
-    
+    // Check if email exists in the patient or doctor database
+    let user = await Patient.findOne({ email });
     if (!user) {
-      user = await Doctor.findOne({ email: Token.email });
+      user = await Doctor.findOne({ email });
       if (!user) {
         return res.status(400).json({ error: "User does not exist" });
       }
     }
 
-    console.log(user);
-
-    //check if the token is expired
-
-    if (user.resetPasswordExpires < Date.now()) {
-      return res.status(400).json({ error: "Token expired" });
+    // Check if the OTP is correct
+    if (user.resetPasswordOTP !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
     }
 
-    
-    //if the token is not expired, render the reset password page
-    res.render("resetPassword", { user });
+    //check if the OTP is expired
+    if (user.resetPasswordOTPExpires < Date.now()) {
+      return res.status(400).json({ error: "OTP expired" });
+    }
+
+    // Generate a new access token
+    const accessToken = await forgotPasswordAccessToken({
+      _id: user._id,
+      roles: user.role,
+      fName: user.firstName,
+      lName: user.lastName,
+    });
+
+    // Reset the OTP in the user's document
+    user.resetPasswordOTP = undefined;
+    await user.save();
+
+    console.log(accessToken);
+
+    res.status(200).json({ accessToken });
+  } catch (error) {
+    console.error("Error in verifyOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-  catch (error) {
+};
+
+//handle reset password
+const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    // console.log("email:",email);
+    // console.log("password:",password);
+
+    // Check if email exists in the patient or doctor database
+    let user = await Patient.findOne({ email });
+    if (!user) {
+      user = await Doctor.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "User does not exist" });
+      }
+    }
+
+    // console.log("userrrrR:",user);
+
+    // console.log("newPassword",password);
+
+    // Check if the user has an access token
+    if (!req.headers.authorization) {
+      return res.status(401).json({ error: "Access token required" });
+    }
+
+    // Check if the access token is valid and not expired Authorization: `Bearer ${accessToken}`,
+    const accessToken = req.headers.authorization.split(" ")[1];
+    console.log("access", accessToken);
+
+    // Verify the access token
+    const decoded = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    console.log("decoded", decoded);
+    if (!decoded) {
+      return res.status(401).json({ error: "Invalid access token" });
+    }
+    const role = decoded.roles;
+
+    //rewrite the password in database to correct user find by id from access token
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful", role: role });
+  } catch (error) {
     console.error("Error in resetPassword:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
+const resendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    let user = await Patient.findOne({ email });
+    if (!user) {
+      user = await Doctor.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "User does not exist" });
+      }
+    }
+
+    // Generate a new OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.resetPasswordOTP = OTP;
+    user.resetPasswordOTPExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send the OTP via email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
+      },
+    });
+
+    const mailOptions = {
+      from: "manushadananjaya999@gmail.com",
+      to: user.email,
+      subject: "Password Reset OTP",
+      html: `
+        <p>Hello,</p>
+        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
+        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      // console.log("Email sent: " + info.response);
+      //new otp send success message to user 
+      res.status(200).json({ message: "New OTP sent" });
+
+    });
+  } catch (error) {
+    console.error("Error in resendOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   userSignUp,
@@ -294,5 +406,7 @@ module.exports = {
   doctorSignIn,
   refreshAT,
   forgotPassword,
+  verifyOTP,
   resetPassword,
+  resendOTP,
 };
