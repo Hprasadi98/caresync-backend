@@ -3,9 +3,9 @@ const Patient = require("../models/Patient");
 
 const addTestResultLink = async (req, res) => {
   try {
-    const { link, patientID, name } = req.body;
-
-    if (!link || !patientID || !name) {
+    const { link, patientID, TestName } = req.body;
+    console.log(link, patientID, TestName);
+    if (!link || !patientID || !TestName) {
       return res.status(400).json({ error: "Missing required data" });
     }
     if (!mongoose.Types.ObjectId.isValid(patientID)) {
@@ -18,10 +18,16 @@ const addTestResultLink = async (req, res) => {
       return res.status(400).json({ error: "No such patient" });
     }
 
+    const crypto = require("crypto");
+    const id = crypto.randomBytes(16).toString("hex");
+    console.log(id);
+
     const patientData = await Patient.findOneAndUpdate(
       { _id: patientID },
       {
-        $addToSet: { testResultLinks: { link: link, TestName: name } },
+        $addToSet: {
+          testResultLinks: { Testid: id, link: link, TestName: TestName },
+        },
       }
     );
 
