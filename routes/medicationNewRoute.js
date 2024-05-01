@@ -1,12 +1,12 @@
 const express = require("express");
 const {
-  getMedicationform,
+  getMedicationforms,
   postMedicationForm
 } = require("../controllers/medicationNewController.js");
 const router = express.Router();
 
 //get result
-router.get("/", getMedicationform);
+router.get("/", getMedicationforms);
 
 //post a new result
 router.post("/", postMedicationForm);

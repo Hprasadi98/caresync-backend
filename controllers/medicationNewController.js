@@ -2,8 +2,8 @@ const addMedication = require("../models/medicationNewModel");
 
 //get results
 const getMedicationforms = async (req, res) => {
-  const addmedication = await addMedication.find({}).sort({ createdAt: -1 });
-  res.status(200).json(addmedication);
+  const addmedications= await addMedication.find({}).sort({ createdAt: -1 });
+  res.status(200).json(addmedications);
 };
 
 
@@ -22,7 +22,7 @@ const postMedicationForm = async (req, res) => {
 
   //add doc to db
   try {
-  const addmedication = await addMedication.create({
+  const addmedications = await addMedication.create({
       by,
       medicine,
       date,
@@ -32,13 +32,13 @@ const postMedicationForm = async (req, res) => {
       baw,
       description,
     });
-    res.status(200).json(addmedication);
+    res.status(200).json(addmedications);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-model.export = {
+module.exports = {
   getMedicationforms,
   postMedicationForm,
 };
