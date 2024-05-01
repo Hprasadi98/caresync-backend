@@ -17,22 +17,24 @@ const {
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
 
 const userSignUp = async (req, res) => {
-  console.log(req.body);
+  console.log("Patient Signup req.body : ",req.body);
 
   const { firstName, lastName, nic, email, password } = req.body;
 
   const existingUser = await Patient.findOne({ email });
 
   if (existingUser) {
-    return res.status(400).send({ error: "Email is in use" });
+    console.log("Email is in use");
+    return res.status(400).json({ error: "Email is in use. Please use a different email or login using the email" });
   }
 
   try {
     const user = new Patient({ firstName, lastName, nic, email, password });
     await user.save();
-
+    console.log("Patient Signup Success");
     res.status(200).send();
   } catch (err) {
+    console.log(err);
     return res.status(400).send(err.message);
   }
 };
