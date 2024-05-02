@@ -51,9 +51,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "patient",
     },
+    mobileNumber: {
+      type: String,
+    },
+    birthday: {
+      type: String,
+    },
+    weight: {
+      type: String,
+    },
+
     testResultLinks:{
       type: Array,
       default: [],
+
     },
     resetPasswordOTP: {
       type: String,
@@ -62,7 +73,6 @@ const userSchema = new mongoose.Schema(
       type: Date,
     },
 
-    
   },
   { timestamps: true }
 );
