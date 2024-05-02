@@ -6,7 +6,7 @@ const Doctor = mongoose.model("Doctor");
 
 const nodemailer = require("nodemailer");
 
-const { verify } = require("jsonwebtoken");
+
 
 const {
   generateRefreshToken,
