@@ -20,9 +20,7 @@ const {
   refreshAccessToken,
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
 
-const {
-  forgotPasswordAccessToken,
-} = require("../utils/TokenGenarate/forgotPasswordAccessToken");
+
 
 const userSignUp = async (req, res) => {
   console.log("Patient Signup req.body : ",req.body);
