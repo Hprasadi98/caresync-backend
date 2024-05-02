@@ -172,7 +172,7 @@ const refreshAT = async (req, res) => {
   if (!refreshToken) {
     return res.status(400).send({ error: "Must provide refresh token" });
   }
-  // return res.status(200).send({ msg: "Success" });
+
   refreshAccessToken(refreshToken)
     .then((result) => {
       if (result) {
@@ -266,6 +266,12 @@ const verifyOTP = async (req, res) => {
     // Check if email exists in the patient or doctor database
     const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
 
+    if(user === null){
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+      
+    }
+
     // Check if the OTP is correct
     if (user.resetPasswordOTP !== otp) {
       return res.status(400).json({ error: "Invalid OTP" });
@@ -291,32 +297,23 @@ const verifyOTP = async (req, res) => {
 //handle reset password
 const resetPassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email, newPassword ,userType} = req.body;
     console.log(req.body);
-    // console.log("email:",email);
-    // console.log("password:",password);
+    
 
     // Check if email exists in the patient or doctor database
-    let user = await Patient.findOne({ email });
-    if (!user) {
-      user = await Doctor.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: "User does not exist" });
-      }
+    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
+
+    if(user === null){
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+      
     }
 
-    // console.log("userrrrR:",user);
+   
+    // Reset the password in the user's document
 
-    // console.log("newPassword",password);
-
-    // Check if the user has an access token
-    if (!req.headers.authorization) {
-      return res.status(401).json({ error: "Access token required" });
-    }
-
-    console.log("req.headers.authorization", req.headers.authorization);
-
-    //rewrite the password in database to correct user find by id from access token
+    
     user.password = newPassword;
     await user.save();
 
