@@ -64,7 +64,14 @@ const userSchema = new mongoose.Schema(
     testResultLinks:{
       type: Array,
       default: [],
-    }
+
+    },
+    resetPasswordOTP: {
+      type: String,
+    },
+    resetPasswordOTPExpires: {
+      type: Date,
+    },
 
   },
   { timestamps: true }
