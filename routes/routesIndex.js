@@ -13,10 +13,8 @@ const PatientHistoryRoutes = require("./patientHistoryRoutes");
 const MedicalIncidentRoutes = require("./MedicalIncidentRoutes");
 const ExtTestRoutes = require("./ExternalTestResult.Routes");
 
-
 const PortalAuthRoutes = require("./portalAuthRoutes");
-const MedicationNewRoutes = require("./medicationNewRoute")
-
+const MedicationNewRoutes = require("./medicationNewRoute");
 
 router.use("/doctors", AuthMiddleware, DoctorRoutes);
 router.use("/breathingTests", AuthMiddleware, BreathingTestRoutes);
@@ -25,7 +23,7 @@ router.use("/patientsHistory", AuthMiddleware, PatientHistoryRoutes);
 router.use("/patients", AuthMiddleware, PatientRoutes);
 router.use("/medications", AuthMiddleware, MedicationRoutes);
 router.use("/medicalIncident", AuthMiddleware, MedicalIncidentRoutes);
-router.use("/extTests", AuthMiddleware, ExtTestRoutes );
+router.use("/extTests", AuthMiddleware, ExtTestRoutes);
 router.use("/medication", AuthMiddleware, MedicationNewRoutes);
 
 router.use(authRoutes);
@@ -34,6 +32,5 @@ router.use("/portal/auth", PortalAuthRoutes);
 router.get("/", (req, res) => {
   res.status(200).json({ message: "CareSync Test Endpoint v1" });
 });
-
 
 module.exports = router;

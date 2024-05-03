@@ -79,8 +79,7 @@ const adminSignIn = async (req, res) => {
       lName: user.lastName,
     });
 
-    res.send({ token:accessToken, refreshToken:refreshToken });
-
+    res.send({ token: accessToken, refreshToken: refreshToken });
   } catch (err) {
     return res.status(401).send({ error: "Invalid password" });
   }

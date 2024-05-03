@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   getMedicationforms,
-  postMedicationForm
+  postMedicationForm,
 } = require("../controllers/medicationNewController.js");
 const router = express.Router();
 

@@ -4,7 +4,7 @@ const {
   getPatient,
   addDocAccess,
   deletePatient,
-  updatePatient
+  updatePatient,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -17,7 +17,6 @@ router.get("/patientId", getPatient);
 
 // Delete a patient
 router.delete("/:id", deletePatient);
-
 
 // update a patient
 router.put("/:id", updatePatient);

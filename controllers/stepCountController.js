@@ -2,13 +2,15 @@ const stepCount = require("../models/MediTestingModels/stepCountModel");
 
 //get results
 const getStepCounterTestResult = async (req, res) => {
-  const stepCountResult = await stepCount.find({pID:212}).sort({ createdAt: -1 });
+  const stepCountResult = await stepCount
+    .find({ pID: 212 })
+    .sort({ createdAt: -1 });
   res.status(200).json(stepCountResult);
 };
 
 //post result
 const createStepCountResult = async (req, res) => {
-  const {pID, date, stopwatchTime, steps, distance, calories } = req.body;
+  const { pID, date, stopwatchTime, steps, distance, calories } = req.body;
 
   //add doc to db
   try {
@@ -34,7 +36,7 @@ const deleteStepCounterTestResult = async (req, res) => {
 
 //delete one result
 const deleteOneStepCountResult = (req, res, next) => {
-  const {id} = req.params;
+  const { id } = req.params;
   stepCount
     .deleteOne({ _id: id })
     .then((response) => {

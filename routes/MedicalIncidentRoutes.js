@@ -1,19 +1,13 @@
-const express=require('express')
-const router=express.Router()
+const express = require("express");
+const router = express.Router();
 const {
-    
-    createTestMedicalIncident,  GetTestMedicalIncident,
-}=require('../controllers/medicalIncidentController');
-
-
-
-
+  createTestMedicalIncident,
+  GetTestMedicalIncident,
+} = require("../controllers/medicalIncidentController");
 
 //post a new test
-router.post('/', 
-createTestMedicalIncident);
+router.post("/", createTestMedicalIncident);
 //Get a test
-router.get('/', 
-GetTestMedicalIncident);
+router.get("/", GetTestMedicalIncident);
 
-module.exports=router;
+module.exports = router;

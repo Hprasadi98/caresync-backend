@@ -49,7 +49,7 @@ const deleteDoctor = async (req, res) => {
   if (!doctor) {
     return res.status(400).json({ error: "No such doctor" });
   }
-  res.status(200).json({ message: "Doctor deleted (Res Msg Only)"});
+  res.status(200).json({ message: "Doctor deleted (Res Msg Only)" });
 };
 
 // update a doctor
@@ -74,7 +74,7 @@ const updateDoctor = async (req, res) => {
 };
 
 // Add a patient's profile access to doctor
-const addPatientAccess = async (req, res) =>{
+const addPatientAccess = async (req, res) => {
   const { id } = req.params;
   console.log(id);
   console.log(req.body.patientID);
@@ -89,13 +89,12 @@ const addPatientAccess = async (req, res) =>{
   const doctor = await DocModel.findOneAndUpdate(
     { _id: id },
     {
-      $addToSet: { accessPatients : req.body.patientID }
+      $addToSet: { accessPatients: req.body.patientID },
     }
   );
 
   res.status(200).json(doctor);
-}
-
+};
 
 // Verify a doctor
 const verifyDoctor = async (req, res) => {
@@ -108,13 +107,12 @@ const verifyDoctor = async (req, res) => {
   const doctor = await DocModel.findOneAndUpdate(
     { _id: id },
     {
-      medicalIdVerify : true,
+      medicalIdVerify: true,
     }
   );
   console.log(doctor);
-  res.status(200).json({message: "Doctor Verified"});
-
-}
+  res.status(200).json({ message: "Doctor Verified" });
+};
 
 module.exports = {
   getDoctors,

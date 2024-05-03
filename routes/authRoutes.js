@@ -31,7 +31,7 @@ router.post("/refreshAT", refreshAT);
 // Forgot Password
 router.post("/forgotPassword", forgotPassword);
 
-//otp verification 
+//otp verification
 router.post("/verifyOTP", verifyOTP);
 
 //password reset

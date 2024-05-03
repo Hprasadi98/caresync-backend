@@ -6,8 +6,6 @@ const Doctor = mongoose.model("Doctor");
 
 const nodemailer = require("nodemailer");
 
-
-
 const {
   generateRefreshToken,
 } = require("../utils/TokenGenarate/generateRefreshToken");
@@ -20,10 +18,8 @@ const {
   refreshAccessToken,
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
 
-
-
 const userSignUp = async (req, res) => {
-  console.log("Patient Signup req.body : ",req.body);
+  console.log("Patient Signup req.body : ", req.body);
 
   const { firstName, lastName, nic, email, password } = req.body;
 
@@ -31,7 +27,12 @@ const userSignUp = async (req, res) => {
 
   if (existingUser) {
     console.log("Email is in use");
-    return res.status(400).json({ error: "Email is in use. Please use a different email or login using the email" });
+    return res
+      .status(400)
+      .json({
+        error:
+          "Email is in use. Please use a different email or login using the email",
+      });
   }
 
   try {
@@ -203,14 +204,12 @@ const forgotPassword = async (req, res) => {
         ? await Doctor.findOne({ email })
         : null;
     console.log("user:", user);
-    
-    if(user === null){
+
+    if (user === null) {
       console.log("User does not exist");
       return res.status(400).json({ error: "User does not exist" });
-      
     }
-    
-    
+
     // Generate a random OTP
     const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
 
@@ -261,15 +260,19 @@ const forgotPassword = async (req, res) => {
 const verifyOTP = async (req, res) => {
   try {
     console.log(req.body);
-    const { email, otp,userType} = req.body;
+    const { email, otp, userType } = req.body;
 
     // Check if email exists in the patient or doctor database
-    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
 
-    if(user === null){
+    if (user === null) {
       console.log("User does not exist");
       return res.status(400).json({ error: "User does not exist" });
-      
     }
 
     // Check if the OTP is correct
@@ -286,7 +289,6 @@ const verifyOTP = async (req, res) => {
     user.resetPasswordOTP = undefined;
     await user.save();
 
-   
     res.status(200).json({ message: "OTP verified" });
   } catch (error) {
     console.error("Error in verifyOTP:", error);
@@ -297,23 +299,24 @@ const verifyOTP = async (req, res) => {
 //handle reset password
 const resetPassword = async (req, res) => {
   try {
-    const { email, newPassword ,userType} = req.body;
+    const { email, newPassword, userType } = req.body;
     console.log(req.body);
-    
 
     // Check if email exists in the patient or doctor database
-    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
 
-    if(user === null){
+    if (user === null) {
       console.log("User does not exist");
       return res.status(400).json({ error: "User does not exist" });
-      
     }
 
-   
     // Reset the password in the user's document
 
-    
     user.password = newPassword;
     await user.save();
 
@@ -326,16 +329,20 @@ const resetPassword = async (req, res) => {
 
 const resendOTP = async (req, res) => {
   try {
-    const { email,userType} = req.body;
+    const { email, userType } = req.body;
 
     // Check if email exists in the patient or doctor database
-    const user = userType === "patient" ? await Patient.findOne({ email }) : userType === "doctor" ? await Doctor.findOne({ email }) : null;
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
 
-    if(user === null){
+    if (user === null) {
       console.log("User does not exist");
       return res.status(400).json({ error: "User does not exist" });
-      
-    } 
+    }
 
     // Generate a new OTP
     const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP

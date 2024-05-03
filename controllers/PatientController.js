@@ -23,7 +23,7 @@ const getPatient = async (req, res) => {
   res.status(200).json(Patient);
 };
 
-const addDocAccess = async (req, res) =>{
+const addDocAccess = async (req, res) => {
   const { id } = req.params;
   console.log(id);
   console.log(req.body.docID);
@@ -38,11 +38,11 @@ const addDocAccess = async (req, res) =>{
   const patient = await Patient.findOneAndUpdate(
     { _id: id },
     {
-      $addToSet: { accessDoctors : req.body.docID }
+      $addToSet: { accessDoctors: req.body.docID },
     }
   );
   res.status(200).json(patient);
-}
+};
 
 // delete a patient
 const deletePatient = async (req, res) => {
@@ -58,21 +58,21 @@ const deletePatient = async (req, res) => {
   if (!patient) {
     return res.status(400).json({ error: "No such patient" });
   }
-  res.status(200).json({ message: "Patient deleted"});
+  res.status(200).json({ message: "Patient deleted" });
 };
 
-
-
-const updatePatient= async (req, res) => {
+const updatePatient = async (req, res) => {
   const { id } = req.params;
   const newData = req.body;
 
   try {
     // Find the patient by ID and update their information
-    const updatedPatient = await Patient.findByIdAndUpdate(id, newData, { new: true });
+    const updatedPatient = await Patient.findByIdAndUpdate(id, newData, {
+      new: true,
+    });
 
     if (!updatedPatient) {
-      return res.status(404).json({ error: 'Patient not found' });
+      return res.status(404).json({ error: "Patient not found" });
     }
 
     // Optionally, you can perform additional operations or validation here
@@ -80,40 +80,15 @@ const updatePatient= async (req, res) => {
     // Send the updated patient object in the response
     res.json(updatedPatient);
   } catch (error) {
-    console.error('Error updating patient:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error("Error updating patient:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
   getPatients,
   getPatient,
   deletePatient,
   addDocAccess,
-  updatePatient
+  updatePatient,
 };

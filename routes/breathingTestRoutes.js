@@ -17,6 +17,6 @@ router.post("/", createBreathingTestResult);
 router.delete("/", deletebreathingTestResults);
 
 //delete result one by one
-router.delete("/:id", deleteOneResult)
+router.delete("/:id", deleteOneResult);
 
 module.exports = router;
