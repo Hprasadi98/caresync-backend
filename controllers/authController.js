@@ -27,12 +27,10 @@ const userSignUp = async (req, res) => {
 
   if (existingUser) {
     console.log("Email is in use");
-    return res
-      .status(400)
-      .json({
-        error:
-          "Email is in use. Please use a different email or login using the email",
-      });
+    return res.status(400).json({
+      error:
+        "Email is in use. Please use a different email or login using the email",
+    });
   }
 
   try {
@@ -59,6 +57,10 @@ const userSignIn = async (req, res) => {
 
   if (!user) {
     return res.status(400).send({ error: "Invalid email" });
+  }
+
+  if (user.patientVerification == false) {
+    return res.status(400).send({ error: "User not verified" });
   }
 
   try {
@@ -287,6 +289,49 @@ const verifyOTP = async (req, res) => {
 
     // Reset the OTP in the user's document
     user.resetPasswordOTP = undefined;
+
+    //check if user is verified
+
+    await user.save();
+
+    res.status(200).json({ message: "OTP verified" });
+  } catch (error) {
+    console.error("Error in verifyOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//handle verify OTP in patient registration
+const verifyOtpPatient = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { email, otp } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    const user = await Patient.findOne({ email });
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Check if the OTP is correct
+
+    if (user.emailVerificationOTP !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
+    }
+
+    //check if the OTP is expired
+    if (user.emailVerificationExpires < Date.now()) {
+      return res.status(400).json({ error: "OTP expired" });
+    }
+
+    // Reset the OTP in the user's document
+    user.emailVerificationOTP = undefined;
+
+    //set the user as verified
+    user.patientVerification = true;
+
     await user.save();
 
     res.status(200).json({ message: "OTP verified" });
@@ -389,6 +434,61 @@ const resendOTP = async (req, res) => {
   }
 };
 
+const getOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log("email from GetOtp:", email);
+
+    user = await Patient.findOne({ email });
+
+    console.log("user from GetOtp:", user);
+
+    // Generate a new OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.emailVerificationOTP = OTP;
+    user.emailVerificationExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send the OTP via email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
+      },
+    });
+
+    const mailOptions = {
+      from: "manushadananjaya999@gmail.com",
+      to: user.email,
+      subject: "Registration OTP",
+      html: `
+        <p>Hello,</p>
+        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
+        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent: " + info.response);
+      //new otp send success message to user
+      res.status(200).json({ message: "New OTP sent" });
+    });
+  } catch (error) {
+    console.error("Error in resendOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
@@ -399,4 +499,6 @@ module.exports = {
   verifyOTP,
   resetPassword,
   resendOTP,
+  getOTP,
+  verifyOtpPatient,
 };
