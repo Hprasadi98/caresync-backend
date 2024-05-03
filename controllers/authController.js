@@ -467,14 +467,14 @@ const getOTP = async (req, res) => {
       subject: "Registration OTP",
       html: `
         <p>Hello,</p>
-        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
-        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
-        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Welcome to the CareSync.</p>
+        <p>Your OTP for registration is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your registration will remain unchanged.</p>
         <p>Thank you.</p>
       `,
     };
 
-    transporter.sendMail(mailOptions, (error) => {
+    transporter.sendMail(mailOptions, (error,info) => {
       if (error) {
         console.log(error);
         return res.status(500).json({ error: "Error sending email" });
