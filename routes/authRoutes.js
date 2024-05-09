@@ -10,6 +10,7 @@ const {
   verifyOTP,
   resetPassword,
   resendOTP,
+  changePassword,
 } = require("../controllers/authController");
 const { verify } = require("jsonwebtoken");
 
@@ -39,5 +40,8 @@ router.post("/resetPassword", resetPassword);
 
 //resend OTP
 router.post("/resendOTP", resendOTP);
+
+//change password
+router.post("/changePassword", changePassword);
 
 module.exports = router;
