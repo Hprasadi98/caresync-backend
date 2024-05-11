@@ -28,7 +28,34 @@ const postMedicationForm = async (req, res) => {
   }
 };
 
+//delete one
+const deleteOneMedication = (req, res, next) => {
+  const { id } = req.params;
+  addMedication
+    .deleteOne({ _id: id })
+    .then((response) => {
+      res.status(200).json({ response });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
+};
+
+//get results for a specific day
+const getMedicationforDay = async (req, res) => {
+  const { date } = req.params;
+  addMedication.find({date:date}).sort({ createdAt: -1 })
+  .then((response) => {
+    res.status(200).json({ response });
+  })
+  .catch((error) => {
+    res.status(400).json({ error });
+  });
+};
+
 module.exports = {
   getMedicationforms,
   postMedicationForm,
+  deleteOneMedication,
+  getMedicationforDay,
 };
