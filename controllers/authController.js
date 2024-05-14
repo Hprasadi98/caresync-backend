@@ -489,6 +489,43 @@ const getOTP = async (req, res) => {
   }
 };
 
+//change password
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, userType, id } = req.body;
+
+    // Check user from user id
+    const user =
+      userType === "patient"
+        ? await Patient.findById(id)
+        : userType === "doctor"
+        ? await Doctor.findById(id)
+        : null;
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Check if the current password is correct
+    try {
+      await user.comparePassword(currentPassword);
+    } catch (err) {
+      return res.status(400).send({ error: "Current password is invalid" });
+    }
+
+    // Reset the password in the user's document
+    user.password = newPassword;
+
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error in changePassword:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
@@ -499,6 +536,8 @@ module.exports = {
   verifyOTP,
   resetPassword,
   resendOTP,
+  changePassword,
   getOTP,
   verifyOtpPatient,
+
 };
