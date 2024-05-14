@@ -1,9 +1,8 @@
 const {
   adminSignUp,
   adminSignIn,
-  adminChangePass
+  adminChangePass,
 } = require("../controllers/portalAuthController");
-
 
 const express = require("express");
 const router = express.Router();
@@ -16,6 +15,5 @@ router.post("/signin", adminSignIn);
 
 // Change Password
 router.post("/changepass", adminChangePass);
-
 
 module.exports = router;

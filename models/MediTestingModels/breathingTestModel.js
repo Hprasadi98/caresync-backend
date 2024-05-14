@@ -4,9 +4,17 @@ const Schema = mongoose.Schema;
 
 const breathingTestSchema = new Schema(
   {
+    pID:{
+      type:Number,
+      required:true,
+    },
     date: {
       type: String,
       required: true,
+    },
+    systime: {
+      type: String,
+      required:true,
     },
     stopwatchTime: {
       type: String,

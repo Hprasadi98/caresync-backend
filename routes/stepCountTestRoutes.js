@@ -1,19 +1,23 @@
-const express = require('express')
+const express = require("express");
 const {
-   getStepCounterTestResult,
-   createStepCountResult,
-   deleteStepCounterTestResult 
-}= require('../controllers/stepCountController')
+  getStepCounterTestResult,
+  createStepCountResult,
+  deleteStepCounterTestResult,
+  deleteOneStepCountResult,
+} = require("../controllers/stepCountController");
 
-const router = express.Router()
+const router = express.Router();
 
 //get all results
-router.get('/', getStepCounterTestResult)
+router.get("/", getStepCounterTestResult);
 
 //post a new result
-router.post('/', createStepCountResult)
+router.post("/", createStepCountResult);
 
 //delete results
-router.delete('/', deleteStepCounterTestResult)
+router.delete("/", deleteStepCounterTestResult);
 
-module.exports = router
+//delete one result
+router.delete("/:id", deleteOneStepCountResult);
+
+module.exports = router;

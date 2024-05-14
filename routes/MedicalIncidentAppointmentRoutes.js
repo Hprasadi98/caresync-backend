@@ -1,12 +1,10 @@
-const express=require('express')
-const router=express.Router()
+const express = require("express");
+const router = express.Router();
 const {
-    
-    createAppointmentMedicalIncident
-}=require('../controllers/medicalIncidentAppointmentController')
+  createAppointmentMedicalIncident,
+} = require("../controllers/medicalIncidentAppointmentController");
 
 //post a new test
-router.post('/', 
-createAppointmentMedicalIncident)
+router.post("/", createAppointmentMedicalIncident);
 
-module.exports=router
+module.exports = router;

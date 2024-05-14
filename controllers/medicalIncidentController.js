@@ -1,5 +1,5 @@
-const TestMedicalIncident = require('../models/medicalIncidentTestModel');
-const mongoose = require('mongoose');
+const TestMedicalIncident = require("../models/medicalIncidentTestModel");
+const mongoose = require("mongoose");
 
 // Create a new medical incident
 // const createTestMedicalIncident = async (req, res) => {
@@ -64,12 +64,10 @@ const createTestMedicalIncident = async (req, res) => {
   }
 };
 
-
-
 const GetTestMedicalIncident = async (req, res) => {
   try {
     console.log("Fetching tests");
-    const Tests = await TestMedicalIncident.find({}).sort({ createdAt: -1 });;
+    const Tests = await TestMedicalIncident.find({}).sort({ createdAt: -1 });
     // .sort({
     //   createdAt: -1,
     // });
@@ -82,5 +80,6 @@ const GetTestMedicalIncident = async (req, res) => {
 };
 
 module.exports = {
-  createTestMedicalIncident,GetTestMedicalIncident
+  createTestMedicalIncident,
+  GetTestMedicalIncident,
 };

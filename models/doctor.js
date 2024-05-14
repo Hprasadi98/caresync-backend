@@ -52,6 +52,12 @@ const doctorSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  resetPasswordOTP: {
+    type: String,
+  },
+  resetPasswordOTPExpires: {
+    type: Date,
+  },
 },
   { timestamps: true });
 

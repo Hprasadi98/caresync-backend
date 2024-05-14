@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getbreathingTestResult,
   createBreathingTestResult,
+  deleteOneResult,
   deletebreathingTestResults,
 } = require("../controllers/breathingTestController");
 
@@ -14,5 +15,8 @@ router.post("/", createBreathingTestResult);
 
 //delete results
 router.delete("/", deletebreathingTestResults);
+
+//delete result one by one
+router.delete("/:id", deleteOneResult);
 
 module.exports = router;

@@ -4,6 +4,8 @@ require("../models/Patient");
 const Patient = mongoose.model("Patient");
 const Doctor = mongoose.model("Doctor");
 
+const nodemailer = require("nodemailer");
+
 const {
   generateRefreshToken,
 } = require("../utils/TokenGenarate/generateRefreshToken");
@@ -17,22 +19,29 @@ const {
 } = require("../utils/TokenGenarate/refreshAccessGenerate");
 
 const userSignUp = async (req, res) => {
-  console.log(req.body);
+  console.log("Patient Signup req.body : ", req.body);
 
   const { firstName, lastName, nic, email, password } = req.body;
 
   const existingUser = await Patient.findOne({ email });
 
   if (existingUser) {
-    return res.status(400).send({ error: "Email is in use" });
+    console.log("Email is in use");
+    return res
+      .status(400)
+      .json({
+        error:
+          "Email is in use. Please use a different email or login using the email",
+      });
   }
 
   try {
     const user = new Patient({ firstName, lastName, nic, email, password });
     await user.save();
-
+    console.log("Patient Signup Success");
     res.status(200).send();
   } catch (err) {
+    console.log(err);
     return res.status(400).send(err.message);
   }
 };
@@ -164,7 +173,7 @@ const refreshAT = async (req, res) => {
   if (!refreshToken) {
     return res.status(400).send({ error: "Must provide refresh token" });
   }
-  // return res.status(200).send({ msg: "Success" });
+
   refreshAccessToken(refreshToken)
     .then((result) => {
       if (result) {
@@ -179,10 +188,215 @@ const refreshAT = async (req, res) => {
     });
 };
 
+//handle forgot passowrd
+const forgotPassword = async (req, res) => {
+  try {
+    const { email, userType } = req.body;
+
+    console.log("email:", email);
+    console.log("userType:", userType);
+
+    // Check if email exists in the patient or doctor database
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
+    console.log("user:", user);
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Generate a random OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.resetPasswordOTP = OTP;
+    user.resetPasswordOTPExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send the OTP via email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
+      },
+    });
+
+    console.log("email:", user.email);
+
+    const mailOptions = {
+      from: "manushadananjaya999@gmail.com",
+      to: user.email,
+      subject: "Password Reset OTP",
+      html: `
+        <p>Hello,</p>
+        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
+        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent: " + info.response);
+      res.status(200).json({ message: "Email sent" });
+    });
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//handle verify OTP
+const verifyOTP = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { email, otp, userType } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Check if the OTP is correct
+    if (user.resetPasswordOTP !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
+    }
+
+    //check if the OTP is expired
+    if (user.resetPasswordOTPExpires < Date.now()) {
+      return res.status(400).json({ error: "OTP expired" });
+    }
+
+    // Reset the OTP in the user's document
+    user.resetPasswordOTP = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "OTP verified" });
+  } catch (error) {
+    console.error("Error in verifyOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//handle reset password
+const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword, userType } = req.body;
+    console.log(req.body);
+
+    // Check if email exists in the patient or doctor database
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Reset the password in the user's document
+
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const resendOTP = async (req, res) => {
+  try {
+    const { email, userType } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    const user =
+      userType === "patient"
+        ? await Patient.findOne({ email })
+        : userType === "doctor"
+        ? await Doctor.findOne({ email })
+        : null;
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Generate a new OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.resetPasswordOTP = OTP;
+    user.resetPasswordOTPExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send the OTP via email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
+      },
+    });
+
+    const mailOptions = {
+      from: "manushadananjaya999@gmail.com",
+      to: user.email,
+      subject: "Password Reset OTP",
+      html: `
+        <p>Hello,</p>
+        <p>You are receiving this email because you (or someone else) requested to reset the password for your account.</p>
+        <p>Your OTP for password reset is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent: " + info.response);
+      //new otp send success message to user
+      res.status(200).json({ message: "New OTP sent" });
+    });
+  } catch (error) {
+    console.error("Error in resendOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
   doctorSignUp,
   doctorSignIn,
   refreshAT,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
+  resendOTP,
 };
