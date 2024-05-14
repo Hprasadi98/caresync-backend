@@ -59,6 +59,10 @@ const userSignIn = async (req, res) => {
     return res.status(400).send({ error: "Invalid email" });
   }
 
+  if (user.patientVerification == false) {
+    return res.status(400).send({ error: "User not verified" });
+  }
+
   try {
     await user.comparePassword(password);
   } catch (err) {
@@ -285,6 +289,49 @@ const verifyOTP = async (req, res) => {
 
     // Reset the OTP in the user's document
     user.resetPasswordOTP = undefined;
+
+    //check if user is verified
+
+    await user.save();
+
+    res.status(200).json({ message: "OTP verified" });
+  } catch (error) {
+    console.error("Error in verifyOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//handle verify OTP in patient registration
+const verifyOtpPatient = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { email, otp } = req.body;
+
+    // Check if email exists in the patient or doctor database
+    const user = await Patient.findOne({ email });
+
+    if (user === null) {
+      console.log("User does not exist");
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Check if the OTP is correct
+
+    if (user.emailVerificationOTP !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
+    }
+
+    //check if the OTP is expired
+    if (user.emailVerificationExpires < Date.now()) {
+      return res.status(400).json({ error: "OTP expired" });
+    }
+
+    // Reset the OTP in the user's document
+    user.emailVerificationOTP = undefined;
+
+    //set the user as verified
+    user.patientVerification = true;
+
     await user.save();
 
     res.status(200).json({ message: "OTP verified" });
@@ -379,6 +426,61 @@ const resendOTP = async (req, res) => {
       }
       console.log("Email sent: " + info.response);
       //new otp send success message to user
+      res.status(200).json({ message: "OTP sent Successful" });
+    });
+  } catch (error) {
+    console.error("Error in resendOTP:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log("email from GetOtp:", email);
+
+    user = await Patient.findOne({ email });
+
+    console.log("user from GetOtp:", user);
+
+    // Generate a new OTP
+    const OTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+
+    // Save the OTP to the user's document in the database and set an expiry time
+    user.emailVerificationOTP = OTP;
+    user.emailVerificationExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send the OTP via email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "manushadananjaya999@gmail.com",
+        pass: "tums mfyz lncy tmhk",
+      },
+    });
+
+    const mailOptions = {
+      from: "manushadananjaya999@gmail.com",
+      to: user.email,
+      subject: "Registration OTP",
+      html: `
+        <p>Hello,</p>
+        <p>Welcome to the CareSync.</p>
+        <p>Your OTP for registration is: <strong>${OTP}</strong></p>
+        <p>If you did not request this, please ignore this email and your registration will remain unchanged.</p>
+        <p>Thank you.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error,info) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      }
+      console.log("Email sent: " + info.response);
+      //new otp send success message to user
       res.status(200).json({ message: "New OTP sent" });
     });
   } catch (error) {
@@ -435,4 +537,7 @@ module.exports = {
   resetPassword,
   resendOTP,
   changePassword,
+  getOTP,
+  verifyOtpPatient,
+
 };
