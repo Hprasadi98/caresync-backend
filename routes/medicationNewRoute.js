@@ -3,7 +3,8 @@ const {
   getMedicationforms,
   postMedicationForm,
   deleteOneMedication,
-  getMedicationforDay
+  getMedicationforDay,
+  updateMedication,
 } = require("../controllers/medicationNewController.js");
 const router = express.Router();
 
@@ -18,5 +19,8 @@ router.delete("/:id", deleteOneMedication);
 
 //get result for specific day
 router.get("/:date", getMedicationforDay);
+
+//update medication
+router.put("/:id", updateMedication);
 
 module.exports = router;
