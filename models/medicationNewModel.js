@@ -23,6 +23,10 @@ const MedicationNewSchema = new Schema(
         type:Number,
         required:true,
     },
+    dayArray:{
+        type:Array,
+        required:true,
+    },
     times:{
         type:Number,
         required:true,

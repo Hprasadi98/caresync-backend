@@ -8,7 +8,7 @@ const getMedicationforms = async (req, res) => {
 
 //post result
 const postMedicationForm = async (req, res) => {
-  const { by, medicine, date, pills, days, times, baw, description } = req.body;
+  const { by, medicine, date, pills, days, dayArray, times, baw, description } = req.body;
 
   //add doc to db
   try {
@@ -18,6 +18,7 @@ const postMedicationForm = async (req, res) => {
       date,
       pills,
       days,
+      dayArray,
       times,
       baw,
       description,
@@ -44,7 +45,7 @@ const deleteOneMedication = (req, res, next) => {
 //get results for a specific day
 const getMedicationforDay = async (req, res) => {
   const { date } = req.params;
-  addMedication.find({date:date}).sort({ createdAt: -1 })
+  addMedication.find({dayArray:date}).sort({ createdAt: -1 })
   .then((response) => {
     res.status(200).json({ response });
   })
