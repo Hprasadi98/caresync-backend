@@ -1,26 +1,71 @@
 const SymptomMedicalIncident = require("../models/medicalIncidentTestModel");
 const mongoose = require("mongoose");
 
-// Create a new medical incident
 const createSymptomMedicalIncident = async (req, res) => {
-  const { incidentType, date, SymptomDescription } = req.body;
-
   try {
-    // Create a new test medical incident document
-    const symptomMedicalIncident = await SymptomMedicalIncident.create({
+    const {
+      recordName,
+      recordDescription,
       incidentType,
       date,
-      SymptomDescription,
+      symptomType,
+
+    } = req.body;
+
+    // Check if a document with the provided recordName and recordDescription exists
+    let medicalIncident = await SymptomMedicalIncident.findOne({
+      recordName,
+      recordDescription,
     });
 
-    // Respond with the created test medical incident
-    res.status(200).json(symptomMedicalIncident);
+    if (!medicalIncident) {
+      // If no document is found, create a new one
+      medicalIncident = new SymptomMedicalIncident({
+        recordName,
+        recordDescription,
+        incident: [],
+      });
+    }
+
+    // Push the new incident into the incident array
+    medicalIncident.incident.push({
+      incidentType,
+      date,
+      symptomType,
+
+
+
+
+    });
+
+    // Save the updated document
+    await medicalIncident.save();
+
+    res.status(200).json({ message: "symptoms saved successfully" });
   } catch (error) {
-    // If an error occurs during creation, respond with the error message
-    res.status(400).json({ error: error.message });
+    console.error("Error saving incident:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const GetSymptomMedicalIncident = async (req, res) => {
+  try {
+    console.log("Fetching symptoms");
+    const Symptoms = await SymptomMedicalIncident.find({}).sort({ createdAt: -1 });
+    // .sort({
+    //   createdAt: -1,
+    // });
+    console.log(Symptoms);
+    res.status(200).json(Symptoms);
+  } catch (error) {
+    console.error("Error fetching tests:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 module.exports = {
   createSymptomMedicalIncident,
+  GetSymptomMedicalIncident
 };
+
+
