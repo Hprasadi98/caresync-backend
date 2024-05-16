@@ -1,3 +1,4 @@
+const { response } = require("express");
 const addMedication = require("../models/medicationNewModel");
 
 //get results
@@ -54,9 +55,33 @@ const getMedicationforDay = async (req, res) => {
   });
 };
 
+//update medication
+const updateMedication =async(req,res,next) => {
+  const {id} = req.params;
+  const {medicine,
+    date,
+    pills,
+    days,
+    dayArray,
+    times,
+    baw,
+    description,
+  } = req.body;
+  addMedication.updateOne({_id:id},{$set:{medicine:medicine,date:date,pills:pills,days:days,dayArray:dayArray,times:times,baw:baw,description:description}})
+  .then(response=>{
+    console.log(id);
+    res.json({response})
+  })
+  .then(data => console.log(data))
+  .catch(error=>{
+    res.json({error})
+  });
+}
+
 module.exports = {
   getMedicationforms,
   postMedicationForm,
   deleteOneMedication,
   getMedicationforDay,
+  updateMedication
 };
