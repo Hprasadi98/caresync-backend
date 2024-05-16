@@ -1,18 +1,35 @@
 const { response } = require("express");
 const breathingTest = require("../models/MediTestingModels/breathingTestModel.js");
 
-//get results
-const getbreathingTestResult = async (req, res) => {
+// //get results
+// const getbreathingTestResult = async (req, res) => {
+//   const breathingResults = await breathingTest
+//     .find({ pID: "212" })
+//     .sort({ createdAt: -1 });
+//   console.log("breathingResults", breathingResults);
+//   res.status(200).json(breathingResults);
+// };
+
+
+//get a Patients results
+const getPatientbreathingTestResult = async (req, res) => {
+
+  const { id } = req.params;
+  console.log("id", id);
+
   const breathingResults = await breathingTest
-    .find({ pID: 212 })
+    .find({ pID: id })
     .sort({ createdAt: -1 });
+  console.log("breathingResults", breathingResults);
   res.status(200).json(breathingResults);
 };
 
+
 //post result
 const createBreathingTestResult = async (req, res) => {
+  
   const { pID, date, systime, stopwatchTime } = req.body;
-
+  console.log("req.body", req.body);
   //add doc to db
   try {
     const breathing = await breathingTest.create({
@@ -29,13 +46,17 @@ const createBreathingTestResult = async (req, res) => {
 
 //delete results
 const deletebreathingTestResults = async (req, res) => {
-  const deleteResults = await breathingTest.deleteMany({});
+  const { id } = req.params;
+  const deleteResults = await breathingTest.deleteMany({
+    pID: id,
+  });
   res.status(200).json(deleteResults);
 };
 
 //delete one
 const deleteOneResult = (req, res, next) => {
   const { id } = req.params;
+  console.log("id", id);
   breathingTest
     .deleteOne({ _id: id })
     .then((response) => {
@@ -47,7 +68,7 @@ const deleteOneResult = (req, res, next) => {
 };
 
 module.exports = {
-  getbreathingTestResult,
+  getPatientbreathingTestResult,
   createBreathingTestResult,
   deleteOneResult,
   deletebreathingTestResults,

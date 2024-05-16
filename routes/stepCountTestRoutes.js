@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  getStepCounterTestResult,
+  getPatientStepCounterTestResult,
   createStepCountResult,
   deleteStepCounterTestResult,
   deleteOneStepCountResult,
@@ -8,16 +8,19 @@ const {
 
 const router = express.Router();
 
-//get all results
-router.get("/", getStepCounterTestResult);
+// //get all results
+// router.get("/", getStepCounterTestResult);
+
+//get a Patients results
+router.get("/:id", getPatientStepCounterTestResult);
 
 //post a new result
 router.post("/", createStepCountResult);
 
 //delete results
-router.delete("/", deleteStepCounterTestResult);
+router.delete("/PatientData/:id", deleteStepCounterTestResult);
 
 //delete one result
-router.delete("/:id", deleteOneStepCountResult);
+router.delete("/SingleTest/:id", deleteOneStepCountResult);
 
 module.exports = router;
