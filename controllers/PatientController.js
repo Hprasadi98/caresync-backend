@@ -10,17 +10,18 @@ const getPatients = async (req, res) => {
 
 //get a single Patient
 const getPatient = async (req, res) => {
-  const { patientId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(patientId)) {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Invalid patient ID" });
   }
 
-  const Patient = await Patient.findById(patientId);
+  const patient = await Patient.findById(id);
 
-  if (!Patient) {
+  if (!patient) {
     return res.status(404).json({ error: "No such patient" });
   }
-  res.status(200).json(Patient);
+  // console.log(patient);
+  res.status(200).json(patient);
 };
 
 const addDocAccess = async (req, res) => {
@@ -62,9 +63,9 @@ const deletePatient = async (req, res) => {
 };
 
 const updatePatient = async (req, res) => {
+
   const { id } = req.params;
   const newData = req.body;
-
   try {
     // Find the patient by ID and update their information
     const updatedPatient = await Patient.findByIdAndUpdate(id, newData, {
@@ -78,6 +79,7 @@ const updatePatient = async (req, res) => {
     // Optionally, you can perform additional operations or validation here
 
     // Send the updated patient object in the response
+    // console.log(updatedPatient);
     res.json(updatedPatient);
   } catch (error) {
     console.error("Error updating patient:", error);
