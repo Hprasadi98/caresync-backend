@@ -58,6 +58,13 @@ const doctorSchema = new mongoose.Schema({
   resetPasswordOTPExpires: {
     type: Date,
   },
+  gender:{
+    type: String,
+  },
+  mobileNumber:{
+    type: String,
+
+  }
 },
   { timestamps: true });
 
