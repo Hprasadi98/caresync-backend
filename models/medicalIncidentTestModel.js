@@ -12,38 +12,41 @@ const MedicalIncidentSchema = new Schema(
       type: String,
     },
     weight: {
-        type: String,
-      },
-      appetite: {
-        type: String,
-      },
+      type: String,
+    },
+    appetite: {
+      type: String,
+    },
 
 
-    incident:{
-        type:[{
-            incidentType: {
-                type: String,
-              },
-              date: {
-                type: Date,
-              },
-              testType: {
-                type: String,
-              },
-          
-              testProvider: {
-                type: String,
-              },
+    incident: {
+      type: [{
+        incidentType: {
+          type: String,
+        },
+        date: {
+          type: Date,
+        },
+        testType: {
+          type: String,
+        },
+
+        testProvider: {
+          type: String,
+        },
+        symptomType: {
+          type: String,
+        },
 
 
-    }]
+      }]
     },
 
     // //Test Modal data
     // incidentType: {
     //   type: String,
     // },
-    
+
     //Symptom Modal data
     symptomDescription: {
       type: String,
