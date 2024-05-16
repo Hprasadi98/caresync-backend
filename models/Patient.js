@@ -60,6 +60,10 @@ const userSchema = new mongoose.Schema(
     weight: {
       type: String,
     },
+    address:{
+      type: String,
+    },
+    
 
     testResultLinks:{
       type: Array,
