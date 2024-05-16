@@ -1,22 +1,26 @@
 const express = require("express");
 const {
-  getbreathingTestResult,
+  getPatientbreathingTestResult,
   createBreathingTestResult,
   deleteOneResult,
   deletebreathingTestResults,
 } = require("../controllers/breathingTestController");
 
 const router = express.Router();
+
 //get all results
-router.get("/", getbreathingTestResult);
+// router.get("/", getbreathingTestResult);
+
+//get one patients results
+router.get("/:id", getPatientbreathingTestResult);
 
 //post a new result
 router.post("/", createBreathingTestResult);
 
 //delete results
-router.delete("/", deletebreathingTestResults);
+router.delete("/PatientData/:id", deletebreathingTestResults);
 
 //delete result one by one
-router.delete("/:id", deleteOneResult);
+router.delete("/SingleTest/:id", deleteOneResult);
 
 module.exports = router;

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const breathingTestSchema = new Schema(
   {
     pID:{
-      type:Number,
+      type:String,
       required:true,
     },
     date: {
