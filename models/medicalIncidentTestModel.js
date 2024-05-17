@@ -13,20 +13,6 @@ const MedicalIncidentSchema = new Schema(
 
     incident: {
       type: [
-        // {
-        //   incidentType: {
-        //     type: String,
-        //   },
-        //   date: {
-        //     type: Date,
-        //   },
-        //   testType: {
-        //     type: String,
-        //   },
-        //   testProvider: {
-        //     type: String,
-        //   },
-        // },
         {
           incidentType: {
             type: String,
@@ -34,54 +20,85 @@ const MedicalIncidentSchema = new Schema(
           date: {
             type: Date,
           },
+          testType: {
+            type: String,
+          },
+          testProvider: {
+            type: String,
+          },
           symptomType: {
             type: String,
           },
-          // symptomDescription: {
-          //   type: String,
-          // },
+        }],
+
+      // type: [
+      //   {
+      //     incidentType: {
+      //       type: String,
+      //     },
+      //     date: {
+      //       type: Date,
+      //     },
+      //     symptomType: {
+      //       type: String,
+      //     },
+      //   }],
+
+      // {
+      //   incidentType: {
+      //     type: String,
+      //   },
+      //   date: {
+      //     type: Date,
+      //   },
+      //   symptomType: {
+      //     type: String,
+      //   },
+      // symptomDescription: {
+      //   type: String,
+      // },
 
 
 
-        },]
     },
-
-
-    // //Symptom Modal data
-
-
-
-    // frequency: {
-    //   type: String,
-    // },
-    // severity: {
-    //   type: String,
-    // },
-    // duration: {
-    //   type: String,
-    // },
-    // //medication modal data
-    // medi_name: {
-    //   type: String,
-    // },
-    // dosage: {
-    //   type: String,
-    // },
-    // medi_Frequency: {
-    //   type: String,
-    // },
-
-    // //appointment modal data
-    // purpose: {
-    //   type: String,
-    // },
-    // health_pro_name: {
-    //   type: String,
-    // },
-    // health_pro_contact: {
-    //   type: String,
-    // },
   },
+
+
+  // //Symptom Modal data
+
+
+
+  // symptomFrequency: {
+  //   type: String,
+  // },
+  // severity: {
+  //   type: String,
+  // },
+  // duration: {
+  //   type: String,
+  // },
+  // //medication modal data
+  // medi_name: {
+  //   type: String,
+  // },
+  // dosage: {
+  //   type: String,
+  // },
+  // medi_Frequency: {
+  //   type: String,
+  // },
+
+  // //appointment modal data
+  // purpose: {
+  //   type: String,
+  // },
+  // health_pro_name: {
+  //   type: String,
+  // },
+  // health_pro_contact: {
+  //   type: String,
+  // },
+
   { timestamps: true }
 );
 

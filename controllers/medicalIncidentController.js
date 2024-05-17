@@ -6,10 +6,7 @@ const createTestMedicalIncident = async (req, res) => {
   try {
     const {
       recordName,
-      recordDescription,
-      weight,
-      appetite,
-      incidentType,
+      recordDescription, incidentType,
       date,
       testType,
       testProvider,
@@ -26,7 +23,13 @@ const createTestMedicalIncident = async (req, res) => {
       medicalIncident = new TestMedicalIncident({
         recordName,
         recordDescription,
-        incident: [],
+        incident: [{
+          incidentType,
+          date,
+          testType,
+          testProvider,
+
+        }],
       });
     }
 
@@ -36,8 +39,7 @@ const createTestMedicalIncident = async (req, res) => {
       date,
       testType,
       testProvider,
-      weight,
-      appetite,
+
     });
 
     // Save the updated document
