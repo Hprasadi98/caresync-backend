@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
     },
     height: {
       type: String,
-       default: '0'
+      default: "0",
     },
     blood: {
       type: String,
@@ -52,25 +52,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "patient",
     },
-    mobileNumber: {
-      type: String,
-    },
+
     birthday: {
       type: String,
     },
     weight: {
       type: String,
-      default: '0'
+      default: "0",
     },
-    address:{
+    address: {
       type: String,
     },
-    
+    mobileNumber: {
+      type: String,
+    },
 
-    testResultLinks:{
+    testResultLinks: {
       type: Array,
       default: [],
-
     },
     resetPasswordOTP: {
       type: String,
@@ -88,7 +87,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
   },
   { timestamps: true }
 );

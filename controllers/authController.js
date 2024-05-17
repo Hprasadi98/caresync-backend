@@ -526,6 +526,26 @@ const changePassword = async (req, res) => {
   }
 };
 
+
+
+// Check if an email exists in the database
+const checkEmailExists = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const patient = await Patient.findOne({ email });
+    res.json({ exists: !!patient });
+  } catch (error) {
+    console.error("Error checking email:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+
+
+
+
 module.exports = {
   userSignUp,
   userSignIn,
@@ -539,5 +559,6 @@ module.exports = {
   changePassword,
   getOTP,
   verifyOtpPatient,
+  checkEmailExists
 
 };

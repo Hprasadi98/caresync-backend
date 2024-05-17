@@ -5,6 +5,7 @@ const {
   addDocAccess,
   deletePatient,
   updatePatient,
+
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -23,5 +24,10 @@ router.put("/:id", updatePatient);
 
 // Give patient access to doctor
 router.patch("/addDocAccess/:id", addDocAccess);
+
+
+
+
+
 
 module.exports = router;

@@ -13,6 +13,7 @@ const {
   changePassword,
   getOTP,
   verifyOtpPatient,
+  checkEmailExists
 } = require("../controllers/authController");
 const { verify } = require("jsonwebtoken");
 
@@ -51,6 +52,9 @@ router.post("/getOTP" , getOTP);
 
 // OTP Verification patient Register
 router.post("/verifyOtpPatient", verifyOtpPatient);
+// Endpoint to check if an email exists
+router.get("/:email", checkEmailExists);
+
 
 
 module.exports = router;
