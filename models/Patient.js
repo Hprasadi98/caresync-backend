@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema(
     },
     height: {
       type: String,
+       default: '0'
     },
     blood: {
       type: String,
@@ -59,6 +60,7 @@ const userSchema = new mongoose.Schema(
     },
     weight: {
       type: String,
+      default: '0'
     },
     address:{
       type: String,
