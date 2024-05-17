@@ -21,7 +21,7 @@ router.get("/:id", getDoctor);
 // router.delete("/:id", deleteDoctor);
 
 // Update a doctor
-router.patch("/:id", updateDoctor);
+router.put("/:id", updateDoctor);
 
 // Add patient access to doctor
 router.patch("/addPatientAccess/:id", addPatientAccess);
