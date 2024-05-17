@@ -26,7 +26,16 @@ const createTestMedicalIncident = async (req, res) => {
       medicalIncident = new TestMedicalIncident({
         recordName,
         recordDescription,
-        incident: [],
+        incident: [
+          {
+            incidentType,
+            date,
+            testType,
+            testProvider,
+            weight,
+            appetite,
+          },
+        ],
       });
     }
 
@@ -43,7 +52,7 @@ const createTestMedicalIncident = async (req, res) => {
     // Save the updated document
     await medicalIncident.save();
 
-    res.status(200).json({ message: "test saved successfully" });
+    res.status(200).json({ message: "Incident saved successfully" });
   } catch (error) {
     console.error("Error saving incident:", error.message);
     res.status(500).json({ error: "Internal server error" });

@@ -13,20 +13,20 @@ const MedicalIncidentSchema = new Schema(
 
     incident: {
       type: [
-        // {
-        //   incidentType: {
-        //     type: String,
-        //   },
-        //   date: {
-        //     type: Date,
-        //   },
-        //   testType: {
-        //     type: String,
-        //   },
-        //   testProvider: {
-        //     type: String,
-        //   },
-        // },
+        {
+          incidentType: {
+            type: String,
+          },
+          date: {
+            type: Date,
+          },
+          testType: {
+            type: String,
+          },
+          testProvider: {
+            type: String,
+          },
+        },
         {
           incidentType: {
             type: String,

@@ -23,7 +23,14 @@ const createSymptomMedicalIncident = async (req, res) => {
       medicalIncident = new SymptomMedicalIncident({
         recordName,
         recordDescription,
-        incident: [],
+        incident: [{
+          incidentType,
+          date,
+          symptomType,
+
+        }
+
+        ],
       });
     }
 
