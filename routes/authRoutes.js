@@ -13,7 +13,8 @@ const {
   changePassword,
   getOTP,
   verifyOtpPatient,
-  checkEmailExists
+  checkEmailExists,
+  checkEmailExistsDoctors,
 } = require("../controllers/authController");
 const { verify } = require("jsonwebtoken");
 
@@ -48,13 +49,14 @@ router.post("/resendOTP", resendOTP);
 router.post("/changePassword", changePassword);
 
 //get otp when patient register
-router.post("/getOTP" , getOTP);
+router.post("/getOTP", getOTP);
 
 // OTP Verification patient Register
 router.post("/verifyOtpPatient", verifyOtpPatient);
-// Endpoint to check if an email exists
+// Endpoint to check if an email exists patients
 router.get("/:email", checkEmailExists);
 
-
+// Endpoint to check if an email exists doctors
+router.get("/:doctors/:email", checkEmailExistsDoctors);
 
 module.exports = router;
