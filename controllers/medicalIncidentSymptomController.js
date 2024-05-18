@@ -9,6 +9,12 @@ const createSymptomMedicalIncident = async (req, res) => {
       incidentType,
       date,
       symptomType,
+      symptom_Description,
+      symptomFrequency,
+      severity,
+      appetite,
+      weight
+
 
     } = req.body;
 
@@ -27,6 +33,11 @@ const createSymptomMedicalIncident = async (req, res) => {
           incidentType,
           date,
           symptomType,
+          symptom_Description,
+          symptomFrequency,
+          severity,
+          appetite,
+          weight
         }],
       });
     }
@@ -36,6 +47,11 @@ const createSymptomMedicalIncident = async (req, res) => {
       incidentType,
       date,
       symptomType,
+      symptom_Description,
+      symptomFrequency,
+      severity,
+      appetite,
+      weight
 
 
 

@@ -29,34 +29,23 @@ const MedicalIncidentSchema = new Schema(
           symptomType: {
             type: String,
           },
+          symptom_Description: {
+            type: String,
+          },
+          symptomFrequency: {
+            type: String,
+          },
+          severity: {
+            type: String,
+          },
+          appetite: {
+            type: String,
+          },
+          weight: {
+            type: String,
+          }
         }],
 
-      // type: [
-      //   {
-      //     incidentType: {
-      //       type: String,
-      //     },
-      //     date: {
-      //       type: Date,
-      //     },
-      //     symptomType: {
-      //       type: String,
-      //     },
-      //   }],
-
-      // {
-      //   incidentType: {
-      //     type: String,
-      //   },
-      //   date: {
-      //     type: Date,
-      //   },
-      //   symptomType: {
-      //     type: String,
-      //   },
-      // symptomDescription: {
-      //   type: String,
-      // },
 
 
 
@@ -67,13 +56,6 @@ const MedicalIncidentSchema = new Schema(
   // //Symptom Modal data
 
 
-
-  // symptomFrequency: {
-  //   type: String,
-  // },
-  // severity: {
-  //   type: String,
-  // },
   // duration: {
   //   type: String,
   // },
