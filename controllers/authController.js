@@ -474,7 +474,7 @@ const getOTP = async (req, res) => {
       `,
     };
 
-    transporter.sendMail(mailOptions, (error,info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
         return res.status(500).json({ error: "Error sending email" });
@@ -526,6 +526,30 @@ const changePassword = async (req, res) => {
   }
 };
 
+// Check if an email exists in the database
+const checkEmailExists = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const patient = await Patient.findOne({ email });
+    res.json({ exists: !!patient });
+  } catch (error) {
+    console.error("Error checking email:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Check if an email exists in the database doctors
+const checkEmailExistsDoctors = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const doctor = await Doctor.findOne({ email });
+    res.json({ exists: !!doctor });
+  } catch (error) {
+    console.error("Error checking email:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
@@ -539,5 +563,6 @@ module.exports = {
   changePassword,
   getOTP,
   verifyOtpPatient,
-
+  checkEmailExists,
+  checkEmailExistsDoctors,
 };
