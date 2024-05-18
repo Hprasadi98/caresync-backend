@@ -1,35 +1,4 @@
 
-// const express = require("express");
-// const router = express.Router();
-// const {
-//   createTestMedicalIncident,
-//   GetTestMedicalIncident,
-// } = require("../controllers/medicalIncidentController");
-
-// const {
-//   createSymptomMedicalIncident,
-// } = require("../controllers/medicalIncidentSymptomController");
-
-// // Define a single POST route
-// router.post("/", (req, res, next) => {
-//   // Check condition based on request parameter or body property
-//   const condition = req.body.type === "symptom"; // Example condition based on request body
-
-//   if (condition) {
-//     // If condition is true, call the first controller function
-//     createSymptomMedicalIncident(req, res, next);
-//   } else {
-//     // If condition is false, call the second controller function
-//     createTestMedicalIncident(req, res, next);
-//   }
-// });
-
-// // Get a test
-// router.get("/", GetTestMedicalIncident);
-
-// module.exports = router;
-
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -41,19 +10,37 @@ const {
   createSymptomMedicalIncident,
 } = require("../controllers/medicalIncidentSymptomController");
 
+const {
+  createMedicationMedicalIncident,
+} = require("../controllers/medicalIncidentMedicationController");
+
+const {
+  createAppointmentMedicalIncident,
+} = require("../controllers/medicalIncidentAppointmentController");
+
+
+
 // Define a single POST route
 router.post("/", (req, res, next) => {
-  // Check condition based on request parameter or body property
-  const type = req.body.type; // Example condition based on request body
+
+  const type = req.body.type;
 
   switch (type) {
+
     case "symptom":
-      // If type is "symptom", call the first controller function
-      createSymptomMedicalIncident(req, res, next);
+      createSymptomMedicalIncident(req, res, next);// If type is "symptom", call the first controller function
       break;
-    default:
-      // For any other type, call the second controller function
+
+    case "test":
       createTestMedicalIncident(req, res, next);
+      break;
+
+    case "medication":
+      createMedicationMedicalIncident(req, res, next);
+      break;
+
+    case "appointment":
+      createAppointmentMedicalIncident(req, res, next);
       break;
   }
 });

@@ -20,12 +20,14 @@ const MedicalIncidentSchema = new Schema(
           date: {
             type: Date,
           },
+          //test data
           testType: {
             type: String,
           },
           testProvider: {
             type: String,
           },
+          //symptom data
           symptomType: {
             type: String,
           },
@@ -38,48 +40,42 @@ const MedicalIncidentSchema = new Schema(
           severity: {
             type: String,
           },
+          SymptomDuration: {
+            type: String,
+          },
           appetite: {
             type: String,
           },
           weight: {
             type: String,
-          }
+          },
+          //Medicaction data
+          medi_name: {
+            type: String,
+          },
+          medi_dosage: {
+            type: String,
+          },
+          medi_Frequency: {
+            type: String,
+          },
+          // //appointment modal data
+          appointmentPurpose: {
+            type: String,
+          },
+
+          health_pro_name: {
+            type: String,
+          },
+          health_pro_contact: {
+            type: String,
+          },
+
         }],
-
-
-
 
     },
   },
 
-
-  // //Symptom Modal data
-
-
-  // duration: {
-  //   type: String,
-  // },
-  // //medication modal data
-  // medi_name: {
-  //   type: String,
-  // },
-  // dosage: {
-  //   type: String,
-  // },
-  // medi_Frequency: {
-  //   type: String,
-  // },
-
-  // //appointment modal data
-  // purpose: {
-  //   type: String,
-  // },
-  // health_pro_name: {
-  //   type: String,
-  // },
-  // health_pro_contact: {
-  //   type: String,
-  // },
 
   { timestamps: true }
 );

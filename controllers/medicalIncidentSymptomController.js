@@ -12,6 +12,7 @@ const createSymptomMedicalIncident = async (req, res) => {
       symptom_Description,
       symptomFrequency,
       severity,
+      SymptomDuration,
       appetite,
       weight
 
@@ -36,6 +37,7 @@ const createSymptomMedicalIncident = async (req, res) => {
           symptom_Description,
           symptomFrequency,
           severity,
+          SymptomDuration,
           appetite,
           weight
         }],
@@ -50,6 +52,7 @@ const createSymptomMedicalIncident = async (req, res) => {
       symptom_Description,
       symptomFrequency,
       severity,
+      SymptomDuration,
       appetite,
       weight
 
@@ -78,7 +81,7 @@ const GetSymptomMedicalIncident = async (req, res) => {
     console.log(Symptoms);
     res.status(200).json(Symptoms);
   } catch (error) {
-    console.error("Error fetching tests:", error);
+    console.error("Error fetching symptoms:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
