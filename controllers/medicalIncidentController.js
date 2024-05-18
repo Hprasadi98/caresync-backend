@@ -1,29 +1,12 @@
 const TestMedicalIncident = require("../models/medicalIncidentTestModel");
 const mongoose = require("mongoose");
 
-// Create a new medical incident
-// const createTestMedicalIncident = async (req, res) => {
-//   const {recordName,recordDescription,weight,appetite,incidentType, date,testType, testProvider} = req.body;
-  
-//   try {
-//     // Create a new test medical incident document
-//     const testMedicalIncident = await TestMedicalIncident.create({recordName,recordDescription,weight,appetite,incidentType, date ,testType,testProvider});
 
-//     // Respond with the created test medical incident
-//     res.status(200).json(testMedicalIncident);
-//   } catch (error) {
-//     // If an error occurs during creation, respond with the error message
-//     res.status(400).json({ error: error.message });
-//   }
-// };
 const createTestMedicalIncident = async (req, res) => {
   try {
     const {
       recordName,
-      recordDescription,
-      weight,
-      appetite,
-      incidentType,
+      recordDescription, incidentType,
       date,
       testType,
       testProvider,
@@ -40,7 +23,13 @@ const createTestMedicalIncident = async (req, res) => {
       medicalIncident = new TestMedicalIncident({
         recordName,
         recordDescription,
-        incident: [],
+        incident: [{
+          incidentType,
+          date,
+          testType,
+          testProvider,
+
+        }],
       });
     }
 
@@ -50,8 +39,7 @@ const createTestMedicalIncident = async (req, res) => {
       date,
       testType,
       testProvider,
-      weight,
-      appetite,
+
     });
 
     // Save the updated document

@@ -1,29 +1,81 @@
 const AppointmentMedicalIncident = require("../models/medicalIncidentTestModel");
 const mongoose = require("mongoose");
 
-// Create a new medical incident
 const createAppointmentMedicalIncident = async (req, res) => {
-  const { incidentType, date, purpose, health_pro_name, health_pro_contact } =
-    req.body;
-
   try {
-    // Create a new test medical incident document
-    const appointmentMedicalIncident = await AppointmentMedicalIncident.create({
+    const {
+      recordName,
+      recordDescription,
       incidentType,
       date,
-      purpose,
+      appointmentPurpose,
       health_pro_name,
-      health_pro_contact,
+      health_pro_contact
+
+    } = req.body;
+
+    // Check if a document with the provided recordName and recordDescription exists
+    let medicalIncident = await AppointmentMedicalIncident.findOne({
+      recordName,
+      recordDescription,
     });
 
-    // Respond with the created test medical incident
-    res.status(200).json(appointmentMedicalIncident);
+    if (!medicalIncident) {
+      // If no document is found, create a new one
+      medicalIncident = new AppointmentMedicalIncident({
+        recordName,
+        recordDescription,
+        incident: [{
+          incidentType,
+          date,
+          appointmentPurpose,
+          health_pro_name,
+          health_pro_contact
+        }],
+      });
+    }
+
+    // Push the new incident into the incident array
+    medicalIncident.incident.push({
+      incidentType,
+      date,
+      appointmentPurpose,
+      health_pro_name,
+      health_pro_contact
+
+
+
+
+    });
+
+    // Save the updated document
+    await medicalIncident.save();
+
+    res.status(200).json({ message: "appointments saved successfully" });
   } catch (error) {
-    // If an error occurs during creation, respond with the error message
-    res.status(400).json({ error: error.message });
+    console.error("Error saving incident:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const GetAppointmentMedicalIncident = async (req, res) => {
+  try {
+    console.log("Fetching symptoms");
+    const Appointments = await AppointmentMedicalIncident.find({}).sort({ createdAt: -1 });
+    // .sort({
+    //   createdAt: -1,
+    // });
+    console.log(Appointments);
+    res.status(200).json(Appointments);
+  } catch (error) {
+    console.error("Error fetching Appointments:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 module.exports = {
   createAppointmentMedicalIncident,
+  GetAppointmentMedicalIncident
 };
+
+
