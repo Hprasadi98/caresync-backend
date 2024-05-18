@@ -12,9 +12,6 @@ const createAppointmentMedicalIncident = async (req, res) => {
       health_pro_name,
       health_pro_contact
 
-
-
-
     } = req.body;
 
     // Check if a document with the provided recordName and recordDescription exists

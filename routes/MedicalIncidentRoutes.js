@@ -39,7 +39,7 @@ router.post("/", (req, res, next) => {
       createMedicationMedicalIncident(req, res, next);
       break;
 
-    case "appointment":
+    default:
       createAppointmentMedicalIncident(req, res, next);
       break;
   }
