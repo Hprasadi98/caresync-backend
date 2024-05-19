@@ -1,6 +1,28 @@
 const mongoose = require("mongoose");
 const Patient = require("../models/Patient");
 
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: "dfssgotc9",
+  api_key: "974783845847463",
+  api_secret: "-5AC3_L7e3NRVy00sGud0cXHRjg",
+});
+
+// Configure Multer with Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile_images",
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
+});
+
+const upload = multer({ storage: storage });
+
 //get all Patients
 const getPatients = async (req, res) => {
   const Patients = await Patient.find({}).sort({ createdAt: -1 });
@@ -63,7 +85,6 @@ const deletePatient = async (req, res) => {
 };
 
 const updatePatient = async (req, res) => {
-
   const { id } = req.params;
   const newData = req.body;
   try {
@@ -87,13 +108,43 @@ const updatePatient = async (req, res) => {
   }
 };
 
+const uploadProfileImage = async (req, res) => {
+  try {
+    // Validate patient ID
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid patient ID' });
+    }
 
+    // Handle file upload
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    
+    const imageUrl = req.file.path;
 
+    // Update patient's profile image
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      id,
+      { profileImage: imageUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: 'Profile image uploaded successfully',
+      patient: updatedPatient,
+    });
+  } catch (error) {
+    console.error('Error uploading profile image:', error);
+    res.status(500).json({ message: 'Error uploading profile image', error });
+  }
+};
 module.exports = {
   getPatients,
   getPatient,
   deletePatient,
   addDocAccess,
   updatePatient,
- 
+  uploadProfileImage,
+  upload,
 };
