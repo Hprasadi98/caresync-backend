@@ -1,13 +1,13 @@
 const { response } = require("express");
 const addMedication = require("../models/medicationNewModel");
 
-//get results
+//get all medication
 const getMedicationforms = async (req, res) => {
   const addmedications = await addMedication.find({}).sort({ createdAt: -1 });
   res.status(200).json(addmedications);
 };
 
-//post result
+//post medication
 const postMedicationForm = async (req, res) => {
   const { by, medicine, date, pills, days, dayArray, times, baw, description } =
     req.body;
@@ -44,7 +44,7 @@ const deleteOneMedication = (req, res, next) => {
     });
 };
 
-//get results for a specific day
+//get medication for a specific day
 const getMedicationforDay = async (req, res) => {
   const { date } = req.params;
   addMedication
