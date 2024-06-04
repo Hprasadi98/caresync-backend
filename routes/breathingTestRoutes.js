@@ -4,7 +4,7 @@ const {
   createBreathingTestResult,
   deleteOneResult,
   deletebreathingTestResults,
-} = require("../controllers/breathingTestController");
+} = require("../controllers/MedicalTests_Controllers/breathingTestController");
 
 const router = express.Router();
 
