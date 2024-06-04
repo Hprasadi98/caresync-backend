@@ -1,15 +1,16 @@
 const { response } = require("express");
 const addMedication = require("../models/medicationNewModel");
 
-//get results
+//get all medication
 const getMedicationforms = async (req, res) => {
   const addmedications = await addMedication.find({}).sort({ createdAt: -1 });
   res.status(200).json(addmedications);
 };
 
-//post result
+//post medication
 const postMedicationForm = async (req, res) => {
-  const { by, medicine, date, pills, days, dayArray, times, baw, description } = req.body;
+  const { by, medicine, date, pills, days, dayArray, times, baw, description } =
+    req.body;
 
   //add doc to db
   try {
@@ -43,45 +44,55 @@ const deleteOneMedication = (req, res, next) => {
     });
 };
 
-//get results for a specific day
+//get medication for a specific day
 const getMedicationforDay = async (req, res) => {
   const { date } = req.params;
-  addMedication.find({dayArray:date}).sort({ createdAt: -1 })
-  .then((response) => {
-    res.status(200).json({ response });
-  })
-  .catch((error) => {
-    res.status(400).json({ error });
-  });
+  addMedication
+    .find({ dayArray: date })
+    .sort({ createdAt: -1 })
+    .then((response) => {
+      res.status(200).json({ response });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
 };
 
 //update medication
-const updateMedication =async(req,res,next) => {
-  const {id} = req.params;
-  const {medicine,
-    date,
-    pills,
-    days,
-    dayArray,
-    times,
-    baw,
-    description,
-  } = req.body;
-  addMedication.updateOne({_id:id},{$set:{medicine:medicine,date:date,pills:pills,days:days,dayArray:dayArray,times:times,baw:baw,description:description}})
-  .then(response=>{
-    console.log(id);
-    res.json({response})
-  })
-  .then(data => console.log(data))
-  .catch(error=>{
-    res.json({error})
-  });
-}
+const updateMedication = async (req, res, next) => {
+  const { id } = req.params;
+  const { medicine, date, pills, days, dayArray, times, baw, description } =
+    req.body;
+  addMedication
+    .updateOne(
+      { _id: id },
+      {
+        $set: {
+          medicine: medicine,
+          date: date,
+          pills: pills,
+          days: days,
+          dayArray: dayArray,
+          times: times,
+          baw: baw,
+          description: description,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(id);
+      res.json({ response });
+    })
+    .then((data) => console.log(data))
+    .catch((error) => {
+      res.json({ error });
+    });
+};
 
 module.exports = {
   getMedicationforms,
   postMedicationForm,
   deleteOneMedication,
   getMedicationforDay,
-  updateMedication
+  updateMedication,
 };
