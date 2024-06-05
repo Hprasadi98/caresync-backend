@@ -18,7 +18,7 @@ router.post("/add/", postMedicationForm);
 router.delete("/:id", deleteOneMedication);
 
 //get result for specific day
-router.get("/:date", getMedicationforDay);
+router.get("/date/:date", getMedicationforDay);
 
 //update medication
 router.put("/update/:id", updateMedication);

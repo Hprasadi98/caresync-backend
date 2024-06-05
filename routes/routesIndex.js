@@ -14,7 +14,7 @@ const MedicalIncidentRoutes = require("./MedicalIncidentRoutes");
 const ExtTestRoutes = require("./ExternalTestResult.Routes");
 
 const PortalAuthRoutes = require("./portalAuthRoutes");
-const MedicationNewRoutes = require("./medicationNewRoute");
+const MedicationNewRoutes = require("./Medication.Routes");
 
 router.use("/doctors", AuthMiddleware, DoctorRoutes);
 router.use("/breathingTests", AuthMiddleware, BreathingTestRoutes);

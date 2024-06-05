@@ -65,9 +65,14 @@ const deleteOneMedication = (req, res, next) => {
 //get medication for a specific day
 const getMedicationforDay = async (req, res) => {
   const { date } = req.params;
-  Medication.find({ dayArray: date })
+  const patientID = req.query.patientID;
+  console.log(req.query);
+  console.log(date, patientID);
+
+  Medication.find({ dayArray: date, patientID: patientID})
     .sort({ createdAt: -1 })
     .then((response) => {
+      console.log(response);  
       res.status(200).json({ response });
     })
     .catch((error) => {
