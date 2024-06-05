@@ -9,10 +9,10 @@ const {
 const router = express.Router();
 
 //get result
-router.get("/", getMedicationforms);
+router.get("/:id", getMedicationforms);
 
 //post a new result
-router.post("/", postMedicationForm);
+router.post("/add/", postMedicationForm);
 
 //delete one
 router.delete("/:id", deleteOneMedication);
@@ -21,6 +21,6 @@ router.delete("/:id", deleteOneMedication);
 router.get("/:date", getMedicationforDay);
 
 //update medication
-router.put("/:id", updateMedication);
+router.put("/update/:id", updateMedication);
 
 module.exports = router;
