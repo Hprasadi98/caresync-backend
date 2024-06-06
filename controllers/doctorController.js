@@ -1,6 +1,29 @@
 const mongoose = require("mongoose");
 const DocModel = require("../models/doctor");
 
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: "dfssgotc9",
+  api_key: "974783845847463",
+  api_secret: "-5AC3_L7e3NRVy00sGud0cXHRjg",
+});
+
+// Configure Multer with Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile_images",
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
+});
+
+const upload = multer({ storage: storage });
+
 //Get all doctors
 const getDoctors = async (req, res) => {
   const doctors = await DocModel.find({}).sort({ createdAt: -1 });
@@ -114,6 +137,49 @@ const verifyDoctor = async (req, res) => {
   res.status(200).json({ message: "Doctor Verified" });
 };
 
+
+
+const uploadProfileImage = async (req, res) => {
+  try {
+    // Validate doctor ID
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid doctor ID' });
+    }
+
+    // Handle file upload
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    
+    const imageUrl = req.file.path;
+
+    // Update doctor's profile image
+    const updatedDoctor = await DocModel.findByIdAndUpdate(
+      id,
+      { profileImage: imageUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: 'Profile image uploaded successfully',
+      doctor: updatedDoctor,
+    });
+  } catch (error) {
+    console.error('Error uploading profile image:', error);
+    res.status(500).json({ message: 'Error uploading profile image', error });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   getDoctors,
   getDoctor,
@@ -121,4 +187,6 @@ module.exports = {
   updateDoctor,
   addPatientAccess,
   verifyDoctor,
+  uploadProfileImage,
+  upload,
 };

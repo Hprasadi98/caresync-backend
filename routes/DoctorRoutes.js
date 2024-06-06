@@ -7,6 +7,8 @@ const {
   updateDoctor,
   addPatientAccess,
   verifyDoctor,
+  uploadProfileImage,
+  upload
 } = require("../controllers/doctorController");
 
 const router = express.Router();
@@ -28,5 +30,8 @@ router.patch("/addPatientAccess/:id", addPatientAccess);
 
 // Verify a doctor
 router.patch("/verifyDoctor/:id", verifyDoctor);
+
+// Upload profile image
+router.post("/:id", upload.single('image'), uploadProfileImage);
 
 module.exports = router;

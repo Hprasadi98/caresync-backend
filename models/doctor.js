@@ -64,7 +64,8 @@ const doctorSchema = new mongoose.Schema({
   mobileNumber:{
     type: String,
 
-  }
+  },
+  profileImage: { type: String },
 },
   { timestamps: true });
 
