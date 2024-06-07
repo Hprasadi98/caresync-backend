@@ -5,6 +5,8 @@ const {
   addDocAccess,
   deletePatient,
   updatePatient,
+  uploadProfileImage,
+  upload
 
 } = require("../controllers/patientController");
 
@@ -24,6 +26,9 @@ router.put("/:id", updatePatient);
 
 // Give patient access to doctor
 router.patch("/addDocAccess/:id", addDocAccess);
+
+// Upload profile image
+router.post("/:id", upload.single('image'), uploadProfileImage);
 
 
 
