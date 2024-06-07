@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 const DocModel = require("../models/doctor");
 
-
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: "dfssgotc9",
-  api_key: "974783845847463",
-  api_secret: "-5AC3_L7e3NRVy00sGud0cXHRjg",
-});
+require("dotenv").config();
 
+// Configure Cloudinary using environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 // Configure Multer with Cloudinary Storage
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -137,21 +137,19 @@ const verifyDoctor = async (req, res) => {
   res.status(200).json({ message: "Doctor Verified" });
 };
 
-
-
 const uploadProfileImage = async (req, res) => {
   try {
     // Validate doctor ID
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid doctor ID' });
+      return res.status(400).json({ message: "Invalid doctor ID" });
     }
 
     // Handle file upload
     if (!req.file || !req.file.path) {
-      return res.status(400).json({ message: 'No file uploaded' });
+      return res.status(400).json({ message: "No file uploaded" });
     }
-    
+
     const imageUrl = req.file.path;
 
     // Update doctor's profile image
@@ -162,23 +160,14 @@ const uploadProfileImage = async (req, res) => {
     );
 
     res.status(200).json({
-      message: 'Profile image uploaded successfully',
+      message: "Profile image uploaded successfully",
       doctor: updatedDoctor,
     });
   } catch (error) {
-    console.error('Error uploading profile image:', error);
-    res.status(500).json({ message: 'Error uploading profile image', error });
+    console.error("Error uploading profile image:", error);
+    res.status(500).json({ message: "Error uploading profile image", error });
   }
 };
-
-
-
-
-
-
-
-
-
 
 module.exports = {
   getDoctors,
