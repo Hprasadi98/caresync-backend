@@ -16,7 +16,6 @@ const {
   checkEmailExists,
   checkEmailExistsDoctors,
 } = require("../controllers/authController");
-const { verify } = require("jsonwebtoken");
 
 // Patient Sign-up
 router.post("/signup", userSignUp);
@@ -25,10 +24,10 @@ router.post("/signup", userSignUp);
 router.post("/signin", userSignIn);
 
 // Doctor Sign-up
-router.post("/doctors/signup", doctorSignUp);
+router.post("/doc/signup", doctorSignUp);
 
 // Doctor Sign-in
-router.post("/doctors/signin", doctorSignIn);
+router.post("/doc/signin", doctorSignIn);
 
 // Refresh Access Token
 router.post("/refreshAT", refreshAT);

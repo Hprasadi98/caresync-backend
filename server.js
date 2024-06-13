@@ -3,10 +3,6 @@ const mongoose = require('mongoose')
 const cors = require("cors");
 const express = require('express')
 
-// Middleware Import
-const Auth = require("./middleware/AuthMiddleware");
-const AdminAuth = require("./middleware/AdminAuthMiddleware.js");
-
 
 
 // express app
