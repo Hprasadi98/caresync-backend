@@ -180,7 +180,7 @@ const updatePatient = async (req, res) => {
   }
 };
 
-module.exports = updatePatient;
+
 
 const uploadProfileImage = async (req, res) => {
   try {
@@ -214,6 +214,7 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 module.exports = {
+  updatePatient,
   getPatients,
   getPatient,
   deletePatient,
