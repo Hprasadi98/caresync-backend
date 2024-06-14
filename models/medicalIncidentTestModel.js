@@ -70,6 +70,21 @@ const MedicalIncidentSchema = new Schema(
           health_pro_contact: {
             type: String,
           },
+          pres_note: {
+            type: String,
+          },
+          link: {
+            type: String,
+
+            trim: true, // Trims whitespace from the value
+            validate: {
+              validator: function (v) {
+                // This regular expression allows URLs with or without protocols
+                return /^(ftp|http|https):\/\/[^ "]+$/.test(v); // Basic URL validation
+              },
+              message: props => `${props.value} is not a valid URL!`
+            }
+          },
 
         }],
 
