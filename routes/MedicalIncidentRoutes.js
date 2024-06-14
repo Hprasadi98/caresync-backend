@@ -17,6 +17,10 @@ const {
   createAppointmentMedicalIncident,
 } = require("../controllers/MedicalIncident_Controllers/medicalIncidentAppointmentController");
 
+const {
+  createPrescriptionMedicalIncident,
+} = require("../controllers/MedicalIncident_Controllers/medicalIncidentPrescriptionController");
+
 // Define a single POST route
 router.post("/", (req, res, next) => {
   const type = req.body.type;
@@ -33,6 +37,11 @@ router.post("/", (req, res, next) => {
     case "medication":
       createMedicationMedicalIncident(req, res, next);
       break;
+
+    case "prescription":
+      createPrescriptionMedicalIncident(req, res, next);
+      break;
+
 
     default:
       createAppointmentMedicalIncident(req, res, next);
