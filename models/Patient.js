@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
+const weightSchema = new mongoose.Schema({
+  weight: String,
+  date: { type: Date, default: Date.now },
+});
 const userSchema = new mongoose.Schema(
   {
     patientId: {
@@ -59,6 +62,10 @@ const userSchema = new mongoose.Schema(
     weight: {
       type: String,
       default: "0",
+    },
+    pastWeights: {
+      type: [weightSchema], // Array to store past weights with dates
+      default: [],
     },
     address: {
       type: String,
