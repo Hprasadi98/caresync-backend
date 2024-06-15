@@ -41,6 +41,12 @@ const userSchema = new mongoose.Schema(
     blood: {
       type: String,
     },
+    medicalRecords: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MedicalRecord",
+      },
+    ],
     accessDoctors: {
       type: Array,
       default: [],
