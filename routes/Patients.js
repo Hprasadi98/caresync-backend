@@ -6,8 +6,9 @@ const {
   deletePatient,
   updatePatient,
   uploadProfileImage,
-  upload
-
+  getAccessDoctorList,
+  removeDocAccess,
+  upload,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -27,12 +28,12 @@ router.put("/:id", updatePatient);
 // Give patient access to doctor
 router.patch("/addDocAccess/:id", addDocAccess);
 
+// Give patient access to doctor
+router.patch("/removeDocAccess/:id", removeDocAccess);
+
+router.get("/accessDoctorList/:id/", getAccessDoctorList);
+
 // Upload profile image
-router.post("/:id", upload.single('image'), uploadProfileImage);
-
-
-
-
-
+router.post("/:id", upload.single("image"), uploadProfileImage);
 
 module.exports = router;

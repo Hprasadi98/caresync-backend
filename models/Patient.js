@@ -47,10 +47,12 @@ const userSchema = new mongoose.Schema(
         ref: "MedicalRecord",
       },
     ],
-    accessDoctors: {
-      type: Array,
-      default: [],
-    },
+    accessDoctors: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Doctor",
+      },
+    ],
     refreshToken: {
       type: String,
     },

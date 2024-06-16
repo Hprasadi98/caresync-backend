@@ -67,6 +67,41 @@ const addDocAccess = async (req, res) => {
   res.status(200).json(patient);
 };
 
+const removeDocAccess = async (req, res) => {
+  // mongoose.set("debug", true);
+  const { id } = req.params;
+  // console.log(id);
+  if (!req.body.docID) {
+    return res.status(404).json({ error: "No such doctor" });
+  }
+  const docID = req.body.docID;
+  // console.log(docID);
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such patient" });
+  }
+  if (!mongoose.Types.ObjectId.isValid(req.body.docID)) {
+    return res.status(404).json({ error: "No such doctor" });
+  }
+
+  try {
+    const result = await Patient.findByIdAndUpdate(
+      id,
+      { $pull: { accessDoctors: docID } },
+      { new: true }
+    );
+
+    if (!result) {
+      return res.status(404).json({ message: "No such patient" });
+    }
+
+    return res.send({ message: "Doctor removed from accessDoctors" });
+  } catch (error) {
+    console.error("Error removing doctor from accessDoctors:", error);
+    return res.status(500).send({ message: "Internal server error", error });
+  }
+};
+
 // delete a patient
 const deletePatient = async (req, res) => {
   const { id } = req.params;
@@ -83,67 +118,6 @@ const deletePatient = async (req, res) => {
   }
   res.status(200).json({ message: "Patient deleted" });
 };
-
-// const updatePatient = async (req, res) => {
-//   const { id } = req.params;
-//   const newData = req.body;
-//   try {
-//     // Find the patient by ID and update their information
-//     const updatedPatient = await Patient.findByIdAndUpdate(id, newData, {
-//       new: true,
-//     });
-
-//     if (!updatedPatient) {
-//       return res.status(404).json({ error: "Patient not found" });
-//     }
-
-//     // Optionally, you can perform additional operations or validation here
-
-//     // Send the updated patient object in the response
-//     // console.log(updatedPatient);
-//     res.json(updatedPatient);
-//   } catch (error) {
-//     console.error("Error updating patient:", error);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// };
-
-// const updatePatient = async (req, res) => {
-//   const { id } = req.params;
-//   const newData = req.body;
-
-//   try {
-//     // Find the patient by ID
-//     const patient = await Patient.findById(id);
-
-//     if (!patient) {
-//       return res.status(404).json({ error: "Patient not found" });
-//     }
-
-//     // Check if the weight field is being updated
-//     if (newData.weight && newData.weight !== patient.weight) {
-//       // Add current weight to pastWeights before updating
-//       if (patient.weight) {
-//         patient.pastWeights.push(patient.weight);
-//       }
-//       // Update the current weight
-//       patient.weight = newData.weight;
-//       delete newData.weight; // Remove weight from newData to avoid redundant update
-//     }
-
-//     // Update the rest of the patient's information
-//     Object.assign(patient, newData);
-
-//     // Save the updated patient
-//     const updatedPatient = await patient.save();
-
-//     // Send the updated patient object in the response
-//     res.json(updatedPatient);
-//   } catch (error) {
-//     console.error("Error updating patient:", error);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// };
 
 const updatePatient = async (req, res) => {
   const { id } = req.params;
@@ -180,8 +154,6 @@ const updatePatient = async (req, res) => {
   }
 };
 
-
-
 const uploadProfileImage = async (req, res) => {
   try {
     // Validate patient ID
@@ -213,6 +185,25 @@ const uploadProfileImage = async (req, res) => {
     res.status(500).json({ message: "Error uploading profile image", error });
   }
 };
+
+const getAccessDoctorList = async (req, res) => {
+  const { id } = req.params;
+  console.log("ID: ", id);
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such patient" });
+  }
+
+  const patient = await Patient.findOne({ _id: id })
+    .populate("accessDoctors", "_id firstName lastName medicalId")
+    .select("accessDoctors");
+
+  if (!patient) {
+    return res.status(404).json({ error: "No such patient" });
+  }
+
+  res.status(200).json(patient);
+};
 module.exports = {
   updatePatient,
   getPatients,
@@ -221,5 +212,7 @@ module.exports = {
   addDocAccess,
   updatePatient,
   uploadProfileImage,
+  getAccessDoctorList,
+  removeDocAccess,
   upload,
 };
