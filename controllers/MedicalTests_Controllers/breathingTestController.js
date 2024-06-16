@@ -10,10 +10,8 @@ const breathingTest = require("../../models/MediTestingModels/breathingTestModel
 //   res.status(200).json(breathingResults);
 // };
 
-
 //get a Patients results
 const getPatientbreathingTestResult = async (req, res) => {
-
   const { id } = req.params;
   console.log("id", id);
 
@@ -24,10 +22,8 @@ const getPatientbreathingTestResult = async (req, res) => {
   res.status(200).json(breathingResults);
 };
 
-
 //post result
 const createBreathingTestResult = async (req, res) => {
-  
   const { pID, date, systime, stopwatchTime } = req.body;
   console.log("req.body", req.body);
   //add doc to db

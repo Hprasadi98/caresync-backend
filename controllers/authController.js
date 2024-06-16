@@ -531,7 +531,8 @@ const checkEmailExists = async (req, res) => {
   const { email } = req.params;
   try {
     const patient = await Patient.findOne({ email });
-    res.json({ exists: !!patient });
+    // res.json({ exists: !!patient });
+    res.json({ emailExists: "false" });
   } catch (error) {
     console.error("Error checking email:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -543,7 +544,7 @@ const checkEmailExistsDoctors = async (req, res) => {
   const { email } = req.params;
   try {
     const doctor = await Doctor.findOne({ email });
-    res.json({ exists: !!doctor });
+    res.json({ emailExists: "false" });
   } catch (error) {
     console.error("Error checking email:", error);
     res.status(500).json({ error: "Internal server error" });
