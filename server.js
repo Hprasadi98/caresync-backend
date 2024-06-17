@@ -1,20 +1,16 @@
-require('dotenv').config()
-const mongoose = require('mongoose')
+require("dotenv").config();
+const mongoose = require("mongoose");
 const cors = require("cors");
-const express = require('express')
-
-
+const express = require("express");
 
 // express app
 const app = express();
-
 
 // set port, listen for requests
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
 
 // middleware
 app.use(express.json());
@@ -25,18 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-
 // routes
 const RoutesIndex = require("./routes/routesIndex");
 app.use("/api", RoutesIndex);
-
-
-
-
-
-
 
 //connect to db
 mongoose
@@ -48,10 +35,6 @@ mongoose
     console.log(error);
   });
 
-
-
-
-
 // Test Routes
 
 // app.get("/AuthTest", requireAuth, (req, res) => {
@@ -59,4 +42,3 @@ mongoose
 // });
 // app.use("/api", Auth,  RoutesIndex);
 // app.use("/api/admin", AdminAuth,  RoutesIndex);
-
