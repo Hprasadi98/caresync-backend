@@ -8,6 +8,7 @@ const {
   addPatientAccess,
   verifyDoctor,
   uploadProfileImage,
+  getPatientsWithAccess,
   upload
 } = require("../controllers/doctorController");
 
@@ -33,5 +34,8 @@ router.patch("/verifyDoctor/:id", verifyDoctor);
 
 // Upload profile image
 router.post("/:id", upload.single('image'), uploadProfileImage);
+
+// Get patients with access
+router.get("/getPatientsWithAccess/:id", getPatientsWithAccess);
 
 module.exports = router;
