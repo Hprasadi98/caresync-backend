@@ -48,10 +48,12 @@ const doctorSchema = new mongoose.Schema({
     type:String,
     default: "General"
   },
-  accessPatients:{
-    type: Array,
-    default: []
-  },
+  accessPatients:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
+    },
+  ],
   resetPasswordOTP: {
     type: String,
   },

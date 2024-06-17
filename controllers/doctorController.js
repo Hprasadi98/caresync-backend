@@ -169,6 +169,26 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 
+const getPatientsWithAccess = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Doctor" });
+  }
+
+  const doctor = await DocModel.findById(id)
+    .populate("accessPatients")
+    .select("accessPatients")
+    .exec();
+  if (!doctor) {
+    return res.status(400).json({ error: "No such Doctor" });
+  }
+
+  console.log(doctor.accessPatients);
+
+  res.status(200).json(doctor.accessPatients);
+};
+
 module.exports = {
   getDoctors,
   getDoctor,
@@ -177,5 +197,6 @@ module.exports = {
   addPatientAccess,
   verifyDoctor,
   uploadProfileImage,
+  getPatientsWithAccess,
   upload,
 };
