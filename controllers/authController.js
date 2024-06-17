@@ -103,7 +103,11 @@ const doctorSignUp = async (req, res) => {
 
   const existingDoctor = await Doctor.findOne({ email });
   if (existingDoctor) {
-    return res.status(400).send({ error: "Email is in use" });
+    console.log("Email is in use");
+    return res.status(400).send({
+      error:
+        "Email is in use. Please use a diiferent email or login with the email",
+    });
   }
 
   try {
@@ -120,7 +124,7 @@ const doctorSignUp = async (req, res) => {
 
     res.status(200).send("Success");
   } catch (err) {
-    return res.status(400).send(err.message);
+    return res.status(400).send({ error: err.message });
   }
 };
 

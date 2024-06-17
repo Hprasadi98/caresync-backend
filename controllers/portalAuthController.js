@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const validator = require("validator");
 
 const {
@@ -62,23 +62,26 @@ const adminSignIn = async (req, res) => {
     return res.status(401).send({ error: "Invalid password or email" });
   }
 
+  console.log("User: ", user);
+
   try {
     await user.comparePassword(password);
-    console.log(user._id, user.role, user.firstName, user.lastName);
-    const accessToken = await generateAccessToken({
+    // console.log(user._id, user.role, user.firstName, user.lastName);
+    const accessToken = generateAccessToken({
       _id: user._id,
       roles: user.role,
       fName: user.firstName,
       lName: user.lastName,
     });
 
-    const refreshToken = await generateRefreshToken({
+    const refreshToken = generateRefreshToken({
       _id: user._id,
       roles: user.role,
       fName: user.firstName,
       lName: user.lastName,
     });
-
+    console.log("UserName: ", user.firstName, user.lastName);
+    console.log(accessToken, refreshToken);
     res.send({ token: accessToken, refreshToken: refreshToken });
   } catch (err) {
     return res.status(401).send({ error: "Invalid password" });
