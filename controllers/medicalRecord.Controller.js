@@ -55,7 +55,7 @@ const createRecord = async (req, res) => {
 
 const getAllRecordsOfPatient = async (req, res) => {
   try {
-    const { patientID } = req.body;
+    const { patientID } = req.query;
 
     // Validation
     if (!patientID) {

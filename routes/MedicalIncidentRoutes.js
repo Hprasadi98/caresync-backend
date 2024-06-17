@@ -8,6 +8,9 @@ const {
 const {
   createPrescriptionIncident
 } = require("../controllers/MedicalIncidentControllers/Prescription-MedicalIncident");
+const {
+  createSymptomIncident
+} = require("../controllers/MedicalIncidentControllers/Symptom-MedicalIncident");
 
 
 const router = express.Router();
@@ -22,6 +25,9 @@ router.post("/AppointmentIn/create", createAppointmentIncident);
 
 //Create a new Prescription Incident
 router.post("/PrescriptionIn/create", createPrescriptionIncident);
+
+//Create a new Symptom Incident
+router.post("/SymptomIn/create", createSymptomIncident);
 
 
 

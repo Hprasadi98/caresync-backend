@@ -22,7 +22,9 @@ router.use("/breathingTests", AuthMiddleware, BreathingTestRoutes);
 router.use("/stepCounterTests", AuthMiddleware, StepCounterTestRoutes);
 router.use("/patientsHistory", AuthMiddleware, PatientHistoryRoutes);
 router.use("/patients", AuthMiddleware, PatientRoutes);
+//Medical Incident 
 router.use("/medicalIncident", AuthMiddleware, MedicalIncidentRoutes);
+//Medical Record
 router.use("/medicalRecord", AuthMiddleware, MedicalRecordRoutes);
 
 router.use("/extTests", AuthMiddleware, ExtTestRoutes);
