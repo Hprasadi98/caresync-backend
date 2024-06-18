@@ -27,7 +27,7 @@ router.post("/AppointmentIn/create", createAppointmentIncident);
 router.post("/PrescriptionIn/create", createPrescriptionIncident);
 
 //Create a new Symptom Incident
-router.post("/SymptomIn/create", createSymptomIncident);
+router.post("/symptomIn/create", createSymptomIncident);
 
 
 
