@@ -6,6 +6,7 @@ const createSymptomIncident = async (req, res) => {
     try {
         const {
             recordID,
+            symptomDate,
             symptomType,
             symptomDescription,
             symptomFrequency,
@@ -13,12 +14,14 @@ const createSymptomIncident = async (req, res) => {
             symptomDuration,
             appetite,
             weight,
+
         } = req.body;
 
         // *Validation
         if (
             !recordID ||
             !symptomType ||
+            !symptomDate ||
             !symptomFrequency ||
             !symptomDuration ||
             !severity ||
@@ -44,6 +47,7 @@ const createSymptomIncident = async (req, res) => {
 
         const currentSymptomIncident = new SymptomMedicalIncident({
             recordID,
+            symptomDate,
             symptomType,
             symptomDescription,
             symptomFrequency,

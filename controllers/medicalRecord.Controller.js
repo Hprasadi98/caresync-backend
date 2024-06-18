@@ -87,7 +87,7 @@ const getAllRecordsOfPatient = async (req, res) => {
 
 const getRecord = async (req, res) => {
   try {
-    const { recordID } = req.body;
+    const { recordID } = req.query;
 
     // Validation
     if (!recordID) {
@@ -117,6 +117,15 @@ const getRecord = async (req, res) => {
           populate: {
             path: "appointmentIncidents",
             model: "AppointmentIncident",
+          },
+        },
+      ])
+      .populate([
+        {
+          path: "incidents",
+          populate: {
+            path: "symptomIncidents",
+            model: "SymptomIncident",
           },
         },
       ])
