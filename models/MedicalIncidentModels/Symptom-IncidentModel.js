@@ -8,6 +8,10 @@ const SymptomIncidentSchema = new Schema(
             ref: "MedicalRecord",
             required: true,
         },
+        symptomDate: {
+            type: Date,
+            required: true,
+        },
 
         symptomType: {
             type: String,
