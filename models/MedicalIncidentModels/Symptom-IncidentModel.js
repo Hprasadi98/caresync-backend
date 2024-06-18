@@ -13,7 +13,7 @@ const SymptomIncidentSchema = new Schema(
             type: String,
             required: true,
         },
-        symptom_Description: {
+        symptomDescription: {
             type: String,
             required: true,
         },

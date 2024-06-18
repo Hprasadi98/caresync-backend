@@ -40,7 +40,7 @@ const createTestIncident = async (req, res) => {
       description,
       testDate,
       result,
-      resultLink: resultLink,
+      resultLink,
     });
 
     // Save the updated incident document
