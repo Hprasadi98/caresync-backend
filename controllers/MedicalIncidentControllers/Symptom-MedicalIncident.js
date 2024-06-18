@@ -10,7 +10,7 @@ const createSymptomIncident = async (req, res) => {
             symptomDescription,
             symptomFrequency,
             severity,
-            SymptomDuration,
+            symptomDuration,
             appetite,
             weight,
         } = req.body;
@@ -20,7 +20,7 @@ const createSymptomIncident = async (req, res) => {
             !recordID ||
             !symptomType ||
             !symptomFrequency ||
-            !SymptomDuration ||
+            !symptomDuration ||
             !severity ||
             !appetite ||
             !weight
@@ -48,7 +48,7 @@ const createSymptomIncident = async (req, res) => {
             symptomDescription,
             symptomFrequency,
             severity,
-            SymptomDuration,
+            symptomDuration,
             appetite,
             weight,
         });

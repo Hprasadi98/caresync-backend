@@ -25,7 +25,7 @@ const SymptomIncidentSchema = new Schema(
             type: String,
             required: true,
         },
-        SymptomDuration: {
+        symptomDuration: {
             type: String,
             required: true,
         },
