@@ -45,7 +45,7 @@ const createSymptomIncident = async (req, res) => {
         const currentSymptomIncident = new SymptomMedicalIncident({
             recordID,
             symptomType,
-            symptom_Description,
+            symptomDescription,
             symptomFrequency,
             severity,
             SymptomDuration,
