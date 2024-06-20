@@ -3,6 +3,10 @@ const { Schema } = mongoose;
 
 const MedicationSchema = new Schema(
   {
+    sDate: {
+      type: String,
+      required: true,
+    },
     patientID: {
       type: String,
       required: true,
@@ -12,6 +16,14 @@ const MedicationSchema = new Schema(
       required: true,
     },
     medicine: {
+      type: String,
+      required: true,
+    },
+    meditype: {
+      type: String,
+      required: true,
+    },
+    unit: {
       type: String,
       required: true,
     },
@@ -33,6 +45,14 @@ const MedicationSchema = new Schema(
     },
     times: {
       type: Number,
+      required: true,
+    },
+    frequency: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: String,
       required: true,
     },
     baw: {

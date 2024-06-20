@@ -14,14 +14,19 @@ const getMedicationforms = async (req, res) => {
 //post medication
 const postMedicationForm = async (req, res) => {
   const {
+    sDate,
     userID,
     addedBy,
     medicine,
+    meditype,
+    unit,
     addedDate,
     pills,
     days,
     dayArray,
     times,
+    frequency,
+    duration,
     baw,
     description,
   } = req.body;
@@ -32,14 +37,19 @@ const postMedicationForm = async (req, res) => {
   //add doc to db
   try {
     const medicationData = await Medication.create({
+      sDate,
       patientID: userID,
       addedBy,
       medicine,
+      meditype,
+      unit,
       addedDate,
       pills,
       days,
       dayArray,
       times,
+      frequency,
+      duration,
       baw,
       description,
     });
@@ -84,12 +94,17 @@ const getMedicationforDay = async (req, res) => {
 const updateMedication = async (req, res, next) => {
   const { id } = req.params;
   const {
+    sDate,
     medicine,
+    meditype,
+    unit,
     addedDate,
     pills,
     days,
     dayArray,
     times,
+    frequency,
+    duration,
     baw,
     description,
   } = req.body;
@@ -97,12 +112,17 @@ const updateMedication = async (req, res, next) => {
     { _id: id },
     {
       $set: {
+        sDate: sDate,
         medicine: medicine,
+        meditype: meditype,
+        unit: unit,
         addedDate: addedDate,
         pills: pills,
         days: days,
         dayArray: dayArray,
         times: times,
+        frequency: frequency,
+        duration: duration,
         baw: baw,
         description: description,
       },
