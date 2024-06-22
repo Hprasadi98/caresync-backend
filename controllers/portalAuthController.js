@@ -67,21 +67,21 @@ const adminSignIn = async (req, res) => {
   try {
     await user.comparePassword(password);
     // console.log(user._id, user.role, user.firstName, user.lastName);
-    const accessToken = generateAccessToken({
+    const accessToken = await generateAccessToken({
       _id: user._id,
       roles: user.role,
       fName: user.firstName,
       lName: user.lastName,
     });
 
-    const refreshToken = generateRefreshToken({
+    const refreshToken = await generateRefreshToken({
       _id: user._id,
       roles: user.role,
       fName: user.firstName,
       lName: user.lastName,
     });
     console.log("UserName: ", user.firstName, user.lastName);
-    console.log(accessToken, refreshToken);
+    console.log("AT", accessToken, "RT", refreshToken);
     res.send({ token: accessToken, refreshToken: refreshToken });
   } catch (err) {
     return res.status(401).send({ error: "Invalid password" });
