@@ -77,7 +77,7 @@ const getAllRecordsOfPatient = async (req, res) => {
       return res.status(400).json({ error: "No records found" });
     }
 
-    console.log("Records fetched:", patientRecords);
+    // console.log("Records fetched:", patientRecords);
     res.status(200).json({ patientRecords });
   } catch (error) {
     console.error("Error fetching tests:", error);
@@ -144,7 +144,7 @@ const getRecord = async (req, res) => {
       return res.status(400).json({ error: "No records found" });
     }
 
-    console.log("Records fetched:", currentRecord);
+    // console.log("Records fetched:", currentRecord);
     res.status(200).json({ currentRecord });
   } catch (error) {
     console.error("Error fetching tests:", error);
