@@ -26,13 +26,13 @@ const PrescriptionIncidentSchema = new Schema(
       type: String,
 
       trim: true, // Trims whitespace from the value
-      validate: {
-        validator: function (v) {
-          // This regular expression allows URLs with or without protocols
-          return /^(ftp|http|https):\/\/[^ "]+$/.test(v); // Basic URL validation
-        },
-        message: props => `${props.value} is not a valid URL!`
-      }
+      // validate: {
+      //   validator: function (v) {
+      //     // This regular expression allows URLs with or without protocols
+      //     return /^(ftp|http|https):\/\/[^ "]+$/.test(v); // Basic URL validation
+      //   },
+      //   message: props => `${props.value} is not a valid URL!`
+      // }
     },
 
   },
