@@ -32,6 +32,7 @@ const createAppointmentIncident = async (req, res) => {
 
     // Check if the doctorID is a valid ObjectId
     if (doctorID && !mongoose.Types.ObjectId.isValid(doctorID)) {
+      console.log("Invalid doctor ID", doctorID);
       return res.status(400).json({ error: "Invalid doctor ID" });
     } else {
       // If doctorID is not provided, set customDocID to null

@@ -59,9 +59,11 @@ const getAllRecordsOfPatient = async (req, res) => {
 
     // Validation
     if (!patientID) {
+      console.log("Patient ID is required");
       return res.status(400).json({ error: "Patient ID is required" });
     }
     if (!mongoose.Types.ObjectId.isValid(patientID)) {
+      console.log("Invalid patient ID");
       return res.status(400).json({ error: "Invalid patient ID" });
     }
 
@@ -74,10 +76,11 @@ const getAllRecordsOfPatient = async (req, res) => {
       .select("medicalRecords");
 
     if (!patientRecords) {
+      console.log("No records found");
       return res.status(400).json({ error: "No records found" });
     }
 
-    // console.log("Records fetched:", patientRecords);
+    console.log("Records fetched:", patientRecords);
     res.status(200).json({ patientRecords });
   } catch (error) {
     console.error("Error fetching tests:", error);
