@@ -145,7 +145,7 @@ const doctorSignIn = async (req, res) => {
     await doctor.comparePassword(password);
     console.log("password okay");
   } catch (err) {
-    return res.status(400).send({ error: "Invalid Password" });
+    return res.status(400).send({ error: "Invalid password or email" });
   }
 
   try {
