@@ -25,7 +25,12 @@ const AppointmentIncidentSchema = new Schema(
     },
     description: {
       type: String,
-    },  
+    },
+    addedDate: {
+      type: Date,
+      required: true,
+    },
+
 
   },
   { timestamps: true }
