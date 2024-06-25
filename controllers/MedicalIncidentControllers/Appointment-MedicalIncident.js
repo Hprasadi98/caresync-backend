@@ -11,6 +11,7 @@ const createAppointmentIncident = async (req, res) => {
       appointmentType,
       description,
       appointmentDateTime,
+      addedDate
     } = req.body;
 
     var customDocID = doctorID;
@@ -20,7 +21,8 @@ const createAppointmentIncident = async (req, res) => {
       !recordID ||
       (!doctorID && !doctorName) ||
       !appointmentType ||
-      !appointmentDateTime
+      !appointmentDateTime ||
+      !addedDate
     ) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -55,6 +57,7 @@ const createAppointmentIncident = async (req, res) => {
       appointmentType,
       description,
       appointmentDateTime,
+      addedDate
     });
 
     // Save the updated incident document
