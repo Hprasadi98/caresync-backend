@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 //get result
-router.get("/:id", getMedicationforms);
+router.get("/getOne/:id", getMedicationforms);
 
 //post a new result
 router.post("/add/", postMedicationForm);

@@ -54,9 +54,9 @@ router.post("/getOTP", getOTP);
 router.post("/verifyOtpPatient", verifyOtpPatient);
 
 // Endpoint to check if an email exists patients
-router.get("/:email", checkEmailExists);
+router.get("/checkEmail/:email", checkEmailExists);
 
 // Endpoint to check if an email exists doctors
-router.get("/:doctors/:email", checkEmailExistsDoctors);
+router.get("/checkDocEmail/:doctors/:email", checkEmailExistsDoctors);
 
 module.exports = router;
