@@ -184,7 +184,7 @@ const getPatientsWithAccess = async (req, res) => {
     return res.status(400).json({ error: "No such Doctor" });
   }
 
-  console.log(doctor.accessPatients);
+  // console.log(doctor.accessPatients);
 
   res.status(200).json(doctor.accessPatients);
 };

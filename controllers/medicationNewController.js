@@ -4,7 +4,7 @@ const Medication = require("../models/Medication.Model");
 //get all medication of a patient
 const getMedicationforms = async (req, res) => {
   const { id } = req.params;
-  // console.log("ID:",id);
+  // console.log("ID:", id);
   const medicationData = await Medication.find({
     patientID: id,
   }).sort({ createdAt: -1 });
@@ -79,10 +79,10 @@ const getMedicationforDay = async (req, res) => {
   console.log(req.query);
   console.log(date, patientID);
 
-  Medication.find({ dayArray: date, patientID: patientID})
+  Medication.find({ dayArray: date, patientID: patientID })
     .sort({ createdAt: -1 })
     .then((response) => {
-      console.log(response);  
+      console.log(response);
       res.status(200).json({ response });
     })
     .catch((error) => {
