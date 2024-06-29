@@ -155,8 +155,85 @@ const getRecord = async (req, res) => {
   }
 };
 
+const deleteRecord = async (req, res) => {
+  try {
+    const { recordID } = req.params;
+
+    // Validation
+    if (!recordID) {
+      return res.status(400).json({ error: "RecordID is required" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(recordID)) {
+      return res.status(400).json({ error: "Invalid RecordID" });
+    }
+
+    // Find and delete the medical record
+    const deletedRecord = await MedicalRecord.findByIdAndDelete(recordID);
+
+    if (!deletedRecord) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    // Remove the record reference from the patient's medicalRecords array
+    await Patient.updateOne(
+      { _id: deletedRecord.patientID },
+      { $pull: { medicalRecords: recordID } }
+    );
+
+    res.status(200).json({ message: "Medical Record deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting medical record:", error.message);
+    res
+      .status(500)
+      .json({ error: "Internal server error : Medical Record Deletion" });
+  }
+};
+
+const updateRecord = async (req, res) => {
+  try {
+    const { recordID } = req.params;
+    const { recordName, recordDescription, date } = req.body;
+
+    // Validation
+    if (!recordID) {
+      return res.status(400).json({ error: "RecordID is required" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(recordID)) {
+      return res.status(400).json({ error: "Invalid RecordID" });
+    }
+    // if (!recordName || !recordDescription || !date) {
+    //   return res.status(400).json({ error: "All fields are required" });
+    // }
+
+    // Update the medical record
+    const updatedRecord = await MedicalRecord.findByIdAndUpdate(
+      recordID,
+      {
+        recordName,
+        description: recordDescription,
+        recordDate: date,
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedRecord) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Medical Record updated successfully", updatedRecord });
+  } catch (error) {
+    console.error("Error updating medical record:", error.message);
+    res
+      .status(500)
+      .json({ error: "Internal server error : Medical Record Update" });
+  }
+};
 module.exports = {
   createRecord,
   getAllRecordsOfPatient,
   getRecord,
+  deleteRecord,
+  updateRecord,
 };
