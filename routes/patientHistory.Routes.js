@@ -2,7 +2,7 @@ const express = require("express");
 const {
   getPatientsHistory,
   enterData,
-} = require("../controllers/PatientHistoryController");
+} = require("../controllers/PatientHistory.Controller");
 
 const router = express.Router();
 

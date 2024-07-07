@@ -2,7 +2,7 @@ const {
   adminSignUp,
   adminSignIn,
   adminChangePass,
-} = require("../controllers/portalAuthController");
+} = require("../controllers/portalAuth.Controller");
 
 const express = require("express");
 const router = express.Router();

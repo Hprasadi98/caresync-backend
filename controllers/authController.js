@@ -50,22 +50,26 @@ const userSignIn = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
+    console.log("Must provide email and password");
     return res.status(400).send({ error: "Must provide email and password" });
   }
 
   const user = await Patient.findOne({ email });
 
   if (!user) {
+    console.log("Invalid email");
     return res.status(400).send({ error: "Invalid email" });
   }
 
   if (user.patientVerification == false) {
+    console.log("User not verified");
     return res.status(400).send({ error: "User not verified" });
   }
 
   try {
     await user.comparePassword(password);
   } catch (err) {
+    console.log("Invalid password or email");
     return res.status(400).send({ error: "Invalid password or email" });
   }
 
@@ -185,7 +189,7 @@ const refreshAT = async (req, res) => {
   refreshAccessToken(refreshToken)
     .then((result) => {
       if (result) {
-        res.status(200).send({ token : result.accessToken});
+        res.status(200).send({ token: result.accessToken });
       } else {
         throw error;
       }
@@ -209,8 +213,8 @@ const forgotPassword = async (req, res) => {
       userType === "patient"
         ? await Patient.findOne({ email })
         : userType === "doctor"
-        ? await Doctor.findOne({ email })
-        : null;
+          ? await Doctor.findOne({ email })
+          : null;
     console.log("user:", user);
 
     if (user === null) {
@@ -275,8 +279,8 @@ const verifyOTP = async (req, res) => {
       userType === "patient"
         ? await Patient.findOne({ email })
         : userType === "doctor"
-        ? await Doctor.findOne({ email })
-        : null;
+          ? await Doctor.findOne({ email })
+          : null;
 
     if (user === null) {
       console.log("User does not exist");
@@ -358,8 +362,8 @@ const resetPassword = async (req, res) => {
       userType === "patient"
         ? await Patient.findOne({ email })
         : userType === "doctor"
-        ? await Doctor.findOne({ email })
-        : null;
+          ? await Doctor.findOne({ email })
+          : null;
 
     if (user === null) {
       console.log("User does not exist");
@@ -387,8 +391,8 @@ const resendOTP = async (req, res) => {
       userType === "patient"
         ? await Patient.findOne({ email })
         : userType === "doctor"
-        ? await Doctor.findOne({ email })
-        : null;
+          ? await Doctor.findOne({ email })
+          : null;
 
     if (user === null) {
       console.log("User does not exist");
@@ -505,8 +509,8 @@ const changePassword = async (req, res) => {
       userType === "patient"
         ? await Patient.findById(id)
         : userType === "doctor"
-        ? await Doctor.findById(id)
-        : null;
+          ? await Doctor.findById(id)
+          : null;
 
     if (user === null) {
       console.log("User does not exist");

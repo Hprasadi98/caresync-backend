@@ -2,7 +2,7 @@
 
 // const PatientHistory = require("../models/patientHistory");
 const Patient = require("../models/Patient");
-const PatientHistory = require("./../models/patientHistory");
+const PatientHistory = require("../models/patientHistory");
 
 // Get all patients history
 const getPatientsHistory = async (req, res) => {

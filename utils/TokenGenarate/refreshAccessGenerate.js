@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const DoctorModel = require("../../models/doctor");
 const PatientModel = require("../../models/Patient");
-const AdminModel = require("../../models/PortalAdminModel");
+const AdminModel = require("../../models/PortalAdmin.Model");
 
 const { generateAccessToken } = require("./generateAccessToken");
 
