@@ -22,7 +22,7 @@ router.get("/", getDoctors);
 router.get("/:id", getDoctor);
 
 // Delete a doctor
-// router.delete("/:id", deleteDoctor);
+router.delete("/:id", deleteDoctor);
 
 // Update a doctor
 router.put("/:id", updateDoctor);
