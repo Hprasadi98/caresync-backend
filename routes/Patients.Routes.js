@@ -9,7 +9,7 @@ const {
   getAccessDoctorList,
   removeDocAccess,
   upload,
-} = require("../controllers/patientController");
+} = require("../controllers/Patient.Controller");
 
 const router = express.Router();
 

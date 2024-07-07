@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Doctor = require("../../models/doctor");
 const Patient = require("../../models/Patient");
-const Admin = require("../../models/PortalAdminModel");
+const Admin = require("../../models/PortalAdmin.Model");
 
 const generateRefreshToken = async (payload) => {
   console.log("payload", payload);

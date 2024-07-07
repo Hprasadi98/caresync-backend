@@ -9,8 +9,9 @@ const {
   verifyDoctor,
   uploadProfileImage,
   getPatientsWithAccess,
+  removeAccessOfPatient,
   upload
-} = require("../controllers/doctorController");
+} = require("../controllers/Doctor.Controller");
 
 const router = express.Router();
 
@@ -37,5 +38,8 @@ router.post("/:id", upload.single('image'), uploadProfileImage);
 
 // Get patients with access
 router.get("/getPatientsWithAccess/:id", getPatientsWithAccess);
+
+// Give patient access to doctor
+router.patch("/removeDocAccess/:id", removeAccessOfPatient);
 
 module.exports = router;

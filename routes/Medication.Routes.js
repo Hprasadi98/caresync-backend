@@ -5,7 +5,7 @@ const {
   deleteOneMedication,
   getMedicationforDay,
   updateMedication,
-} = require("../controllers/medicationNewController.js");
+} = require("../controllers/Medication.Controller.js");
 const router = express.Router();
 
 //get result

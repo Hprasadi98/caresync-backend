@@ -189,6 +189,24 @@ const getPatientsWithAccess = async (req, res) => {
   res.status(200).json(doctor.accessPatients);
 };
 
+// Remove patient access from doctor
+const removeAccessOfPatient = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Doctor" });
+  }
+
+  const doctor = await DocModel.findOneAndUpdate(
+    { _id: id },
+    {
+      $pull: { accessPatients: req.body.patientID },
+    }
+  );
+
+  res.status(200).json(doctor);
+};
+
 module.exports = {
   getDoctors,
   getDoctor,
@@ -198,5 +216,6 @@ module.exports = {
   verifyDoctor,
   uploadProfileImage,
   getPatientsWithAccess,
+  removeAccessOfPatient,
   upload,
 };

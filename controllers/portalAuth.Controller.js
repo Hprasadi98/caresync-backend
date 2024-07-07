@@ -10,7 +10,7 @@ const {
   generateAccessToken,
 } = require("../utils/TokenGenarate/generateAccessToken");
 
-require("../models/PortalAdminModel");
+require("../models/PortalAdmin.Model");
 
 const Admin = mongoose.model("Admin");
 
