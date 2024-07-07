@@ -429,14 +429,16 @@ const resendOTP = async (req, res) => {
       `,
     };
 
-    transporter.sendMail(mailOptions, (error) => {
+    
+
+    transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
         return res.status(500).json({ error: "Error sending email" });
       }
       console.log("Email sent: " + info.response);
       //new otp send success message to user
-      res.status(200).json({ message: "OTP sent Successful" });
+      res.status(200).json({ message: "New OTP sent" });
     });
   } catch (error) {
     console.error("Error in resendOTP:", error);
